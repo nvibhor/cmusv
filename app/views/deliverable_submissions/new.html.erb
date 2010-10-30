@@ -1,0 +1,41 @@
+<h1>New deliverable_submission</h1>
+
+<%= stylesheet_link_tag "calendar_date_select/red" %>
+
+<% form_for(@deliverable_submission) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :submission_date %><br />
+    <%= f.calendar_date_select :submission_date %>
+  </p>
+  <p>
+    <%= f.label :person_id %><br />
+    <%= f.text_field :person_id %>
+  </p>
+  <p>
+    <%= f.label :course_id %><br />
+    <%= f.text_field :course_id %>
+  </p>
+  <p>
+    <%= f.label :task_number %><br />
+    <%= f.text_field :task_number %>
+  </p>
+  <p>
+    <%= f.label :course %><br />
+    <%= f.text_field :course %>
+  </p>
+  <p>
+    <%= f.label :deliverable %><br />
+    <%= f.file_field :deliverable %>
+  </p>
+  <p>
+    <%= f.label :comments %><br />
+    <%= f.text_area :comments %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', deliverable_submissions_path %>

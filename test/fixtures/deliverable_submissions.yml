@@ -1,0 +1,23 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  submission_date: 2010-10-29 20:56:04
+  person_id: 1
+  course_id: 1
+  task_number: 1
+  comments: MyString
+  course: MyString
+  deliverable_file_name: MyString
+  deliverable_content_type: MyString
+  deliverable_file_size: 1
+
+two:
+  submission_date: 2010-10-29 20:56:04
+  person_id: 1
+  course_id: 1
+  task_number: 1
+  comments: MyString
+  course: MyString
+  deliverable_file_name: MyString
+  deliverable_content_type: MyString
+  deliverable_file_size: 1

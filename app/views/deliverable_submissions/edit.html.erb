@@ -1,0 +1,48 @@
+<h1>Editing deliverable_submission</h1>
+
+<% form_for(@deliverable_submission) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :submission_date %><br />
+    <%= f.datetime_select :submission_date %>
+  </p>
+  <p>
+    <%= f.label :person_id %><br />
+    <%= f.text_field :person_id %>
+  </p>
+  <p>
+    <%= f.label :course_id %><br />
+    <%= f.text_field :course_id %>
+  </p>
+  <p>
+    <%= f.label :task_number %><br />
+    <%= f.text_field :task_number %>
+  </p>
+  <p>
+    <%= f.label :comments %><br />
+    <%= f.text_field :comments %>
+  </p>
+  <p>
+    <%= f.label :course %><br />
+    <%= f.text_field :course %>
+  </p>
+  <p>
+    <%= f.label :deliverable_file_name %><br />
+    <%= f.text_field :deliverable_file_name %>
+  </p>
+  <p>
+    <%= f.label :deliverable_content_type %><br />
+    <%= f.text_field :deliverable_content_type %>
+  </p>
+  <p>
+    <%= f.label :deliverable_file_size %><br />
+    <%= f.text_field :deliverable_file_size %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @deliverable_submission %> |
+<%= link_to 'Back', deliverable_submissions_path %>

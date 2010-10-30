@@ -1,0 +1,36 @@
+<h1>Listing deliverable_submissions</h1>
+
+<table>
+  <tr>
+    <th>Submission date</th>
+    <th>Person</th>
+    <th>Course</th>
+    <th>Task number</th>
+    <th>Comments</th>
+    <th>Course</th>
+    <th>Deliverable file name</th>
+    <th>Deliverable content type</th>
+    <th>Deliverable file size</th>
+  </tr>
+
+<% @deliverable_submissions.each do |deliverable_submission| %>
+  <tr>
+    <td><%=h deliverable_submission.submission_date %></td>
+    <td><%=h deliverable_submission.person_id %></td>
+    <td><%=h deliverable_submission.course_id %></td>
+    <td><%=h deliverable_submission.task_number %></td>
+    <td><%=h deliverable_submission.comments %></td>
+    <td><%=h deliverable_submission.course %></td>
+    <td><%=h deliverable_submission.deliverable_file_name %></td>
+    <td><%=h deliverable_submission.deliverable_content_type %></td>
+    <td><%=h deliverable_submission.deliverable_file_size %></td>
+    <td><%= link_to 'Show', deliverable_submission %></td>
+    <td><%= link_to 'Edit', edit_deliverable_submission_path(deliverable_submission) %></td>
+    <td><%= link_to 'Destroy', deliverable_submission, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New deliverable_submission', new_deliverable_submission_path %>
