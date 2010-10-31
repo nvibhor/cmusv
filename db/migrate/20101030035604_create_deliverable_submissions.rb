@@ -1,12 +1,14 @@
 class CreateDeliverableSubmissions < ActiveRecord::Migration
   def self.up
     create_table :deliverable_submissions do |t|
-      t.datetime :submission_date
+      t.date :submission_date
       t.integer :person_id
       t.integer :course_id
       t.integer :task_number
       t.string :comments
-      t.string :course
+      # TODO(vibhor): Figure out what this field is for since we already have course_id.
+      # The field name conflicts with belongs_to :course
+      # t.string :course
       t.string :deliverable_file_name
       t.string :deliverable_content_type
       t.integer :deliverable_file_size

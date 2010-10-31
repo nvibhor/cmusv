@@ -5,12 +5,12 @@
 
 <p>
   <b>Person:</b>
-  <%=h @deliverable_submission.person_id %>
+  <%=h @deliverable_submission.person.human_name %>
 </p>
 
 <p>
   <b>Course:</b>
-  <%=h @deliverable_submission.course_id %>
+  <%=h @deliverable_submission.course.name %>
 </p>
 
 <p>
@@ -24,25 +24,9 @@
 </p>
 
 <p>
-  <b>Course:</b>
-  <%=h @deliverable_submission.course %>
-</p>
-
-<p>
   <b>Deliverable file name:</b>
   <%=h @deliverable_submission.deliverable_file_name %>
 </p>
-
-<p>
-  <b>Deliverable content type:</b>
-  <%=h @deliverable_submission.deliverable_content_type %>
-</p>
-
-<p>
-  <b>Deliverable file size:</b>
-  <%=h @deliverable_submission.deliverable_file_size %>
-</p>
-
 
 <%= link_to 'Edit', edit_deliverable_submission_path(@deliverable_submission) %> |
 <%= link_to 'Back', deliverable_submissions_path %>

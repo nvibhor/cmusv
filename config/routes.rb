@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  # TODO: we should explicitly list the actions that we are allowing here.
   map.resources :deliverable_submissions
 
 

@@ -27,6 +27,7 @@ class DeliverableSubmissionsController < ApplicationController
   # GET /deliverable_submissions/new.xml
   def new
     @deliverable_submission = DeliverableSubmission.new
+    @deliverable_submission.submission_date = Date.today
 
     respond_to do |format|
       format.html # new.html.erb
@@ -37,12 +38,15 @@ class DeliverableSubmissionsController < ApplicationController
   # GET /deliverable_submissions/1/edit
   def edit
     @deliverable_submission = DeliverableSubmission.find(params[:id])
+    @deliverable_submission.submission_date = Date.today
   end
 
   # POST /deliverable_submissions
   # POST /deliverable_submissions.xml
   def create
     @deliverable_submission = DeliverableSubmission.new(params[:deliverable_submission])
+    # Needed because we use disabled=>true option with the text_field form helper
+    @deliverable_submission.submission_date = Date.today
 
     respond_to do |format|
       if @deliverable_submission.save
@@ -60,6 +64,8 @@ class DeliverableSubmissionsController < ApplicationController
   # PUT /deliverable_submissions/1.xml
   def update
     @deliverable_submission = DeliverableSubmission.find(params[:id])
+    # Needed because we use disabled=>true option with the text_field form helper
+    @deliverable_submission.submission_date = Date.today
 
     respond_to do |format|
       if @deliverable_submission.update_attributes(params[:deliverable_submission])

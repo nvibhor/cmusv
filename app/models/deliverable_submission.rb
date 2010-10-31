@@ -1,12 +1,16 @@
 class DeliverableSubmission < ActiveRecord::Base
   belongs_to :person
+  belongs_to :course
 
   # TODO(vibhor): The person will eventually be the signed in user.
   validates_presence_of :person
   validates_presence_of :submission_date
 
+  # TODO(vibhor): Update to use amazon s3 as storage.
   has_attached_file :deliverable,
-                    :path => ":rails_root/public/:class/:attachment/:id/:basename.:extension"
+                    :storage => :filesystem,
+                    :url => "/deliverable_submissions/:id/:filename",
+                    :path => ":rails_root/public/deliverable_submissions/:id/:filename"
 
   validates_attachment_presence :deliverable
 end

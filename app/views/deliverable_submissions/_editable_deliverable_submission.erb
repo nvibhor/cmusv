@@ -1,0 +1,34 @@
+<% form_for @deliverable_submission,  :html => { :multipart => true } do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :submission_date %>&nbsp;
+    <%= f.text_field :submission_date, :disabled => true %>
+  </p>
+  <p>
+    <%= f.label :person_id %><br />
+    <!-- TODO(vibhor): This is a temporary solution until we automatically link the signed in user as submitter -->
+    <%= f.collection_select(:person_id, Person.find(:all), :id, :human_name,
+      {:prompt => 'Select submitter'}) %>
+  </p>
+  <p>
+    <%= f.label :course_id %>&nbsp;
+    <%= f.collection_select(:course_id, Course.find(:all), :id, :name,
+      {:prompt => 'Select course'}) %>
+  </p>
+  <p>
+    <%= f.label :task_number %><br />
+    <%= f.text_field :task_number %>
+  </p>
+  <p>
+    <%= f.label 'Upload file' %>&nbsp;
+    <%= f.file_field :deliverable %>
+  </p>
+  <p>
+    <%= f.label :comments %><br />
+    <%= f.text_area :comments %>
+  </p>
+  <p>
+    <%= f.submit button_name %>
+  </p>
+<% end %>

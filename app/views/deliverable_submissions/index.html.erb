@@ -7,23 +7,17 @@
     <th>Course</th>
     <th>Task number</th>
     <th>Comments</th>
-    <th>Course</th>
     <th>Deliverable file name</th>
-    <th>Deliverable content type</th>
-    <th>Deliverable file size</th>
   </tr>
 
 <% @deliverable_submissions.each do |deliverable_submission| %>
-  <tr>
+  <tr style="text-align:center">
     <td><%=h deliverable_submission.submission_date %></td>
-    <td><%=h deliverable_submission.person_id %></td>
-    <td><%=h deliverable_submission.course_id %></td>
+    <td><%=h deliverable_submission.person.human_name %></td>
+    <td><%=h deliverable_submission.course.name %></td>
     <td><%=h deliverable_submission.task_number %></td>
     <td><%=h deliverable_submission.comments %></td>
-    <td><%=h deliverable_submission.course %></td>
-    <td><%=h deliverable_submission.deliverable_file_name %></td>
-    <td><%=h deliverable_submission.deliverable_content_type %></td>
-    <td><%=h deliverable_submission.deliverable_file_size %></td>
+    <td><%= link_to h(deliverable_submission.deliverable_file_name), deliverable_submission.deliverable.url %></td>
     <td><%= link_to 'Show', deliverable_submission %></td>
     <td><%= link_to 'Edit', edit_deliverable_submission_path(deliverable_submission) %></td>
     <td><%= link_to 'Destroy', deliverable_submission, :confirm => 'Are you sure?', :method => :delete %></td>
