@@ -1,6 +1,6 @@
 <p>
   <b>Submission date:</b>
-  <%=h @deliverable_submission.submission_date %>
+  <%=h @deliverable_submission.submission_date.getlocal.strftime("%a %b %d %Y, %I:%M %p") %>
 </p>
 
 <p>

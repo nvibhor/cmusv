@@ -2,10 +2,6 @@
   <%= f.error_messages %>
 
   <p>
-    <%= f.label :submission_date %>&nbsp;
-    <%= f.text_field :submission_date, :disabled => true %>
-  </p>
-  <p>
     <%= f.label :person_id %><br />
     <!-- TODO(vibhor): This is a temporary solution until we automatically link the signed in user as submitter -->
     <%= f.collection_select(:person_id, Person.find(:all), :id, :human_name,

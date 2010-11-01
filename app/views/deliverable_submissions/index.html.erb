@@ -12,7 +12,8 @@
 
 <% @deliverable_submissions.each do |deliverable_submission| %>
   <tr style="text-align:center">
-    <td><%=h deliverable_submission.submission_date %></td>
+    <td>  <%=h deliverable_submission.submission_date.getlocal.strftime("%a %b %d %Y, %I:%M %p") %>
+</td>
     <td><%=h deliverable_submission.person.human_name %></td>
     <td><%=h deliverable_submission.course.name %></td>
     <td><%=h deliverable_submission.task_number %></td>

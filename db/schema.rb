@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(:version => 20101030035604) do
   end
 
   create_table "deliverable_submissions", :force => true do |t|
-    t.date     "submission_date"
+    t.datetime "submission_date"
     t.integer  "person_id"
     t.integer  "course_id"
     t.integer  "task_number"
