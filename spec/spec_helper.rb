@@ -10,6 +10,8 @@ require 'spec/rails'
 
 require 'authlogic/test_case'
 require 'shoulda'
+# for attachment tests
+require "paperclip/matchers"
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
@@ -54,6 +56,8 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
+  # Include module for rspec-compatible matchers for testing Paperclip attachments.
+  config.include Paperclip::Shoulda::Matchers
 end
 
 class ActionController::TestCase
