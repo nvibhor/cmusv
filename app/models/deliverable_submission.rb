@@ -6,6 +6,7 @@ class DeliverableSubmission < ActiveRecord::Base
   validates_presence_of :person
   validates_presence_of :submission_date
   validates_associated :person
+  validates_presence_of :course
 
   # TODO(vibhor): Update to use amazon s3 as storage.
   has_attached_file :deliverable,
