@@ -6,6 +6,7 @@ class DeliverableSubmission < ActiveRecord::Base
   validates_presence_of :person
   validates_presence_of :submission_date
   validates_associated :person
+  validates_presence_of :course
   # This validation is not entirely true as there can be individual deliverable submissions.
   # TODO(vibhor): Fix this once we bring in the notion of individual deliverable.
   validates_presence_of :team
