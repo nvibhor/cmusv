@@ -31,6 +31,7 @@ describe DeliverableSubmission do
     d.association :person_id, :factory => :user
     d.deliverable_file_name 'task1.zip'
     d.course Course.last
+    d.team Team.last
   end
 
   it "is valid with valid attributes" do 
@@ -54,6 +55,12 @@ describe DeliverableSubmission do
   it " is not valid without a course" do
     submission = Factory.build(:deliverable_submission)
     submission.course = nil
+    submission.should_not be_valid
+  end
+
+  it " is not valid without a team" do
+    submission = Factory.build(:deliverable_submission)
+    submission.team = nil
     submission.should_not be_valid
   end
 
