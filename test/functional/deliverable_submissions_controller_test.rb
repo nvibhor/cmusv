@@ -3,7 +3,7 @@ require 'test_helper'
 class DeliverableSubmissionsControllerTest < ActionController::TestCase
   test "should_redirect_without_logged_in" do
     get :index
-    assert_response :redirect
+    assert_redirected_to login_google_url
   end
 
   test "should get index" do
