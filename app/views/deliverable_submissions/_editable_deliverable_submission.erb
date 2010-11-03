@@ -1,5 +1,14 @@
 <% form_for @deliverable_submission,  :html => { :multipart => true } do |f| %>
   <%= f.error_messages %>
+  <!-- TODO(vibhor): The selection of team name should be dependent on 2 factors:
+       1. This is not an individual submission.
+       2. The selected course should automatically select the team.
+  -->
+  <p>
+    <%= f.label 'Team' %>&nbsp;
+    <%= f.collection_select(:team_id, find_current_semester_teams, :id, :name,
+      {:prompt => 'Select team'}) %>
+  </p>
 
   <p>
     <%= f.label :course_id %>&nbsp;

@@ -193,6 +193,16 @@ Factory.define :vibhor, :parent => :person do |p|
   p.webiso_account "vnanavat@andrew.cmu.edu"
 end
 
+Factory.define :mfse, :class => Course do |c|
+ c.name "MfSE"
+ c.number "96-706"
+ c.semester "Fall"
+ c.mini "Both"
+ c.year "2010"
+end
+
+
+
 Factory.define :team_calipers, :class => Team do |t|
  t.name "Team Calipers"
  t.email "fall-2010-calipers@west.cmu.edu"
@@ -206,6 +216,7 @@ Factory.create(:anthony_tang)
 Factory.create(:henry_barnor)
 Factory.create(:fred)
 Factory.create(:vibhor)
+mfse = Factory.create(:mfse)
 
-Factory.create(:team_calipers, :primary_faculty_id => martin.id, :course_id=> architecture)
+Factory.create(:team_calipers, :primary_faculty_id => martin.id, :course_id => mfse.id)
 
