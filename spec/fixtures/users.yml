@@ -1,3 +1,74 @@
+# == Schema Information
+# Schema version: 20101103060434
+#
+# Table name: users
+#
+#  id                       :integer(4)      not null, primary key
+#  webiso_account           :string(255)
+#  login                    :string(40)
+#  email                    :string(100)
+#  crypted_password         :string(40)
+#  created_at               :datetime
+#  updated_at               :datetime
+#  is_staff                 :boolean(1)
+#  is_student               :boolean(1)
+#  is_admin                 :boolean(1)
+#  twiki_name               :string(255)
+#  first_name               :string(255)
+#  last_name                :string(255)
+#  human_name               :string(255)
+#  image_uri                :string(255)
+#  graduation_year          :string(255)
+#  masters_program          :string(255)
+#  masters_track            :string(255)
+#  is_part_time             :boolean(1)
+#  is_teacher               :boolean(1)
+#  is_adobe_connect_host    :boolean(1)
+#  effort_log_warning_email :datetime
+#  is_active                :boolean(1)
+#  legal_first_name         :string(255)
+#  organization_name        :string(255)
+#  title                    :string(255)
+#  work_city                :string(255)
+#  work_state               :string(255)
+#  work_country             :string(255)
+#  telephone1               :string(255)
+#  skype                    :string(255)
+#  tigris                   :string(255)
+#  personal_email           :string(255)
+#  local_near_remote        :string(255)
+#  biography                :text
+#  user_text                :text
+#  office                   :string(255)
+#  office_hours             :string(255)
+#  telephone1_label         :string(255)
+#  telephone2               :string(255)
+#  telephone2_label         :string(255)
+#  telephone3               :string(255)
+#  telephone3_label         :string(255)
+#  telephone4               :string(255)
+#  telephone4_label         :string(255)
+#  updated_by_user_id       :integer(4)
+#  version                  :integer(4)
+#  is_alumnus               :boolean(1)
+#  pronunciation            :string(255)
+#  google_created           :datetime
+#  twiki_created            :datetime
+#  adobe_created            :datetime
+#  msdnaa_created           :datetime
+#  password_salt            :string(255)
+#  persistence_token        :string(255)
+#  single_access_token      :string(255)
+#  login_count              :integer(4)      default(0), not null
+#  failed_login_count       :integer(4)      default(0), not null
+#  last_request_at          :datetime
+#  current_login_at         :datetime
+#  last_login_at            :datetime
+#  current_login_ip         :string(255)
+#  last_login_ip            :string(255)
+#  yammer_created           :datetime
+#
+
 
 quentin:
   id:                        1
@@ -56,6 +127,22 @@ student_sam:
   first_name: Student
   last_name: Sam
   human_name: Student Sam
+  image_uri:                 images/mascot.jpg
+  password_salt: <%= salt = Authlogic::Random.hex_token %>
+  crypted_password: <%= Authlogic::CryptoProviders::Sha512.encrypt("benrocks" + salt) %>
+  persistence_token: 6cde0674657a8a313ce952df979de2830309aa4c11ca65805dd00bfdc65dbcc2f5e36718660a1d2e68c1a08c276d996763985d2f06fd3d076eb7bc4d97b1e317
+
+student_becky:
+  login:  becky
+  email:  beck33@andrew.cmu.edu
+  is_student: true
+  is_staff: false
+  is_teacher: false
+  is_admin: false
+  is_alumnus: false
+  first_name: Student
+  last_name: Becky
+  human_name: Student Becky
   image_uri:                 images/mascot.jpg
   password_salt: <%= salt = Authlogic::Random.hex_token %>
   crypted_password: <%= Authlogic::CryptoProviders::Sha512.encrypt("benrocks" + salt) %>

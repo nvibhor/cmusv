@@ -44,6 +44,7 @@ group :development, :test do
   gem 'mocha'
   gem 'rspec'
   gem 'factory_girl'
+  gem 'annotate-models'
 
   gem 'autotest-rails' if RUBY_PLATFORM =~ /darwin/
   gem "autotest-fsevent" if RUBY_PLATFORM =~ /darwin/

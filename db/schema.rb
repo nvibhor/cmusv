@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101102205916) do
+ActiveRecord::Schema.define(:version => 20101104042642) do
 
   create_table "course_numbers", :force => true do |t|
     t.string   "name"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(:version => 20101102205916) do
     t.integer  "deliverable_file_size"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "team_id"
+    t.boolean  "is_individual",            :default => false
   end
 
   create_table "effort_log_line_items", :force => true do |t|
