@@ -1,23 +1,30 @@
 <h1>Listing deliverable_submissions</h1>
 
-<table>
+<table border=1 cellpadding=0>
   <tr>
-    <th>Submission date</th>
-    <th>Submitter</th>
+    <th>Submitted on</th>
+    <th>Submitted by</th>
     <th>Course</th>
+    <th>Individual?</th>
+    <th>Team</th>
     <th>Task number</th>
-    <th>Comments</th>
     <th>Deliverable file name</th>
   </tr>
 
 <% @deliverable_submissions.each do |deliverable_submission| %>
   <tr style="text-align:center">
-    <td>  <%=h deliverable_submission.submission_date.getlocal.strftime("%a %b %d %Y, %I:%M %p") %>
+    <td>  <%=h deliverable_submission.submission_date.getlocal.strftime("%a %m/%d/%y, %I:%M%p") %>
 </td>
     <td><%=h deliverable_submission.person.human_name %></td>
     <td><%=h deliverable_submission.course.name %></td>
+    <% if deliverable_submission.is_individual? %>
+      <td>Yes</td>
+      <td>n/a</td>
+    <% else %>
+      <td>No</td>
+      <td><%=h deliverable_submission.team.name %></td>
+    <% end %>
     <td><%=h deliverable_submission.task_number %></td>
-    <td><%=h deliverable_submission.comments %></td>
     <td><%= link_to h(deliverable_submission.deliverable_file_name), deliverable_submission.deliverable.url %></td>
     <td><%= link_to 'Show', deliverable_submission %></td>
     <td><%= link_to 'Edit', edit_deliverable_submission_path(deliverable_submission) %></td>

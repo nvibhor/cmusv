@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101104042642) do
+ActiveRecord::Schema.define(:version => 20101104115916) do
 
   create_table "course_numbers", :force => true do |t|
     t.string   "name"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20101104042642) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_individual",            :default => false
+    t.integer  "team_id"
   end
 
   create_table "effort_log_line_items", :force => true do |t|

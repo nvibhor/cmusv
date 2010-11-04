@@ -1,10 +1,17 @@
+<h1>
+<% if @deliverable_submission.is_individual? %>
+  <b>Individual Deliverable</b>
+<% else %>
+  <b> <%=h @deliverable_submission.team.name %> deliverable </b>
+<% end %>
+</h1>
 <p>
-  <b>Submission date:</b>
+  <b>Submitted on:</b>
   <%=h @deliverable_submission.submission_date.getlocal.strftime("%a %b %d %Y, %I:%M %p") %>
 </p>
 
 <p>
-  <b>Submitter:</b>
+  <b>Submitted by:</b>
   <%=h @deliverable_submission.person.human_name %>
 </p>
 
@@ -12,7 +19,6 @@
   <b>Course:</b>
   <%=h @deliverable_submission.course.name %>
 </p>
-
 <p>
   <b>Task number:</b>
   <%=h @deliverable_submission.task_number %>
