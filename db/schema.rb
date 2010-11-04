@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(:version => 20101030035604) do
     t.integer  "course_id"
     t.integer  "task_number"
     t.string   "comments"
+    t.string   "course"
     t.string   "deliverable_file_name"
     t.string   "deliverable_content_type"
     t.integer  "deliverable_file_size"
