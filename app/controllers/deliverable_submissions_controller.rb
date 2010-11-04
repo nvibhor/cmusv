@@ -1,4 +1,6 @@
 class DeliverableSubmissionsController < ApplicationController
+  before_filter :require_user, :except => [:show_by_twiki]
+
   layout 'cmu_sv'
 
   # GET /deliverable_submissions
@@ -50,6 +52,7 @@ class DeliverableSubmissionsController < ApplicationController
   def create
     @deliverable_submission = DeliverableSubmission.new(params[:deliverable_submission])
     @deliverable_submission.submission_date = DateTime.now
+    @deliverable_submission.person_id = current_user.id
 
     respond_to do |format|
       if @deliverable_submission.save

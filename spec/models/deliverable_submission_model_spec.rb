@@ -21,11 +21,16 @@ describe DeliverableSubmission do
     u.password 'testararar'
     u.password_confirmation 'testararar'
   end
+
+  Factory.define :course, :class => Course do |c|
+    c.name 'Course'
+   end
   
   Factory.define :deliverable_submission do |d|
     d.submission_date Date.today
     d.association :person_id, :factory => :user
     d.deliverable_file_name 'task1.zip'
+    d.course Course.last
   end
 
   it "is valid with valid attributes" do 
@@ -43,6 +48,12 @@ describe DeliverableSubmission do
   it " is not valid without a submitter" do
     submission = Factory.build(:deliverable_submission)
     submission.person_id = nil
+    submission.should_not be_valid
+  end
+
+  it " is not valid without a course" do
+    submission = Factory.build(:deliverable_submission)
+    submission.course = nil
     submission.should_not be_valid
   end
 
