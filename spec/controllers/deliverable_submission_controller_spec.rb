@@ -4,10 +4,6 @@ describe DeliverableSubmissionsController do
   fixtures :users  
   integrate_views
 
-  Factory.define :deliverable_submission do |d|
-    d.submission_date Date.today
-    d.deliverable_file_name 'task1.zip'
-  end
 
   describe "NEW deliverable_submission" do
 
