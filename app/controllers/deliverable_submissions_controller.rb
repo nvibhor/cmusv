@@ -47,6 +47,7 @@ class DeliverableSubmissionsController < ApplicationController
 
     respond_to do |format|
       if @deliverable_submission.save
+        send_email
         flash[:notice] = 'DeliverableSubmission was successfully created.'
         format.html { redirect_to(@deliverable_submission) }
         format.xml  { render :xml => @deliverable_submission, :status => :created, :location => @deliverable_submission }
@@ -85,5 +86,38 @@ class DeliverableSubmissionsController < ApplicationController
       format.html { redirect_to(deliverable_submissions_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+  def send_email()
+    # construct message consisting of who submitted, their team, course id (name), task number
+    teams = Team.find(:all, :order => "id", :conditions => ["course_id = ?", @deliverable_submission.course_id])
+
+    team = Team.new
+    
+    # Go through teams and try to find which teams in this course has this person.
+    teams.each do |t|
+      if(t.people.find(:first,  :conditions => ["id = ?", @deliverable_submission.person_id] )!=nil)
+        team = t
+        break
+      end
+    end
+
+    message = "Submitted By : " + @deliverable_submission.person.human_name + " from Team : " + team.name + "\n"
+    message += "Course ID : " + @deliverable_submission.course.name + " Task # : " + @deliverable_submission.task_number.to_s
+    message += "\nComments : " + @deliverable_submission.comments;
+
+    faculty = User.find_by_id(team.primary_faculty_id)
+    if(!faculty.nil?)
+       toaddress = faculty.email
+    else
+      toaddress = "anthony.tang@west.cmu.edu"
+    end
+
+     GenericMailer.deliver_email(
+       :to => toaddress,
+       :subject => "Deliverable Submission",
+       :message => message
+      )
   end
 end
