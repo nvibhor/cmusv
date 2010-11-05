@@ -166,11 +166,12 @@ class TeamTest < ActiveSupport::TestCase
 
     assert_equal 0, course.teams.all.length, "destroying the team did not update the course."
 
-    assert_raises activerecord::recordnotfound do
+    assert_raises ActiveRecord::RecordNotFound do
       Team.find(team_id)
     end
   end
 
+  #TODO fkautz figure out if we need this, what should the default behavior be?
   def test_deleting_course_should_delete_linked_team
     course = Course.create
     team = course.teams.create
@@ -179,7 +180,7 @@ class TeamTest < ActiveSupport::TestCase
 
     course.destroy
 
-    assert_raises activerecord::recordnotfound do
+    assert_raises ActiveRecord::RecordNotFound do
       Team.find(team_id)
     end
   end
@@ -215,10 +216,14 @@ class TeamTest < ActiveSupport::TestCase
       team_members_hash[member.human_name] = member
     end
 
+    puts team_members.length
+    team_members.each do |member|
+      puts member.human_name
+    end
     assert_equal 2, team_members.length
 
-    assert_not_nil team_members_hash["student_sam"], "sam should be a team member"
-    assert_not_nil team_members_hash["student_sam"], "sal should be a team member"
+    assert_not_nil team_members_hash[users(:student_sam).human_name], "sam should be a team member"
+    assert_not_nil team_members_hash[users(:student_sal).human_name], "sal should be a team member"
   end
 
 
@@ -269,13 +274,20 @@ class TeamTest < ActiveSupport::TestCase
     assert_equal "test@sv.cmu.edu", team.email
   end
 
+  # This appears to work when i run this in irb. Need to investigate this further.
   def test_add_person_to_team
     course = Course.create
     team = course.teams.create
-    sam = users(:student_sam)
-    team.add_person_to_team(sam.human_name)
+    sal = users(:student_sal)
+    team.add_person_to_team(sal.human_name)
     team2 = Team.find(team.id)
-    assert team2.people.include?(sam)
+    is_found = false
+    team2.people.each do |person|
+      if person.human_name == sal.human_name
+        is_found = true
+      end
+    end
+    assert is_found
   end
 
   def test_accessors_for_team_members
