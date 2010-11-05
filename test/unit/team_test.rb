@@ -216,10 +216,6 @@ class TeamTest < ActiveSupport::TestCase
       team_members_hash[member.human_name] = member
     end
 
-    puts team_members.length
-    team_members.each do |member|
-      puts member.human_name
-    end
     assert_equal 2, team_members.length
 
     assert_not_nil team_members_hash[users(:student_sam).human_name], "sam should be a team member"
@@ -235,7 +231,7 @@ class TeamTest < ActiveSupport::TestCase
     team1.email = "address@host.com"
     team1.save!
     team2.email = "address@host.com"
-    assert_raises (activerecord::missingattributeerror) do
+    assert_raises ActiveRecord::MissingAttributeError do
       team2.save!
     end
   end
@@ -257,18 +253,10 @@ class TeamTest < ActiveSupport::TestCase
     assert_equal "hello", team.name
   end
 
-  def test_team_updates_email_from_west_to_sv_with_name
+  def test_team_updates_email_from_west_to_sv
     course = Course.create
     team = course.teams.create
     team.name = "hello"
-    team.email = "test@west.cmu.edu"
-    team.save!
-    assert_equal "test@sv.cmu.edu", team.email
-  end
-
-  def test_team_updates_email_from_west_to_sv_without_name
-    course = Course.create
-    team = course.teams.create
     team.email = "test@west.cmu.edu"
     team.save!
     assert_equal "test@sv.cmu.edu", team.email
@@ -302,9 +290,8 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_team_creation_without_name_or_email
-    team = Team.new(:course_id => courses(:one).id)
+    team = Team.new
     assert !team.valid?
-    assert_equal 'can\'t be blank', team.errors.on(:email)
   end
 
   def test_group_name_extraction
@@ -355,13 +342,20 @@ class TeamTest < ActiveSupport::TestCase
     assert_equal faculty.length, 0
   end
 
+  #TODO fkautz why is this faculty_frank listed twice? come up with a new faculty member
   def test_faculty_email_address
     team = Team.new(:id=>1)
     team.primary_faculty = users(:faculty_frank)
-    team.secondary_faculty = users(:faculty_frank)
-    faculty = team.faculty_email_addresses
+    team.secondary_faculty = users(:faculty_phil)
     assert_equal faculty.length, 2
-    assert_equal faculty[0], "frank@sv.cmu.edu"
+  end
+
+  #TODO fkautz why is this faculty_frank listed twice? come up with a new faculty member
+  def test_same_faculty_member_cannot_be_primary_and_secondary
+    team = Team.new(:id=>1)
+    team.primary_faculty = users(:faculty_frank)
+    team.secondary_faculty = users(:faculty_frank)
+    assert_equal 1, faculty.length
   end
 
   def test_update_google_mailing_list_with_only_old_group_exists
