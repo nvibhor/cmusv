@@ -11,6 +11,7 @@ GEM
     activeresource (2.3.4)
       activesupport (= 2.3.4)
     activesupport (2.3.4)
+    annotate-models (1.0.4)
     authlogic (2.1.6)
       activesupport
     aws-s3 (0.6.2)
@@ -101,6 +102,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  annotate-models
   authlogic
   aws-s3
   bundler

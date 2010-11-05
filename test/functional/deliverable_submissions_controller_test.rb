@@ -23,7 +23,8 @@ class DeliverableSubmissionsControllerTest < ActionController::TestCase
     login_as :student_sam
     assert_difference('DeliverableSubmission.count') do
       post :create, :deliverable_submission => {:deliverable_file_name => 'task1.zip',
-                                                :course_id => courses(:mfse).id}
+                                                :course_id => courses(:mfse).id,
+                                                :is_individual => true}
     end
 
     assert_redirected_to deliverable_submission_path(assigns(:deliverable_submission))
@@ -45,7 +46,8 @@ class DeliverableSubmissionsControllerTest < ActionController::TestCase
     login_as :student_sam
     put :update, :id => deliverable_submissions(:one).to_param,
          :deliverable_submission => {:deliverable_file_name => 'task1.zip',
-                                     :course_id => courses(:mfse).id}
+                                     :course_id => courses(:mfse).id,
+                                     :is_individual => true}
     assert_redirected_to deliverable_submission_path(assigns(:deliverable_submission))
   end
 

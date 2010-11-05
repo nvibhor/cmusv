@@ -1,8 +1,8 @@
 class DeliverableSubmission < ActiveRecord::Base
   belongs_to :person
   belongs_to :course
+  belongs_to :team
 
-  # TODO(vibhor): The person will eventually be the signed in user.
   validates_presence_of :person
   validates_presence_of :submission_date
   validates_associated :person
@@ -15,4 +15,10 @@ class DeliverableSubmission < ActiveRecord::Base
                     :path => ":rails_root/public/deliverable_submissions/:id/:filename"
 
   validates_attachment_presence :deliverable
+
+  validate do |submission|
+    if not submission.is_individual? and submission.team.nil?
+      submission.errors.add_to_base("Deliverable should have a team name or make it an individual deliverable.")
+    end
+  end
 end
