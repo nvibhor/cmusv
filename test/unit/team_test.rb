@@ -151,7 +151,7 @@ class TeamTest < ActiveSupport::TestCase
 
     # an id is assigned when they are committed to the database.
     assert_equal course.id, team.course.id
-    assert_equal team.id, course.teams.find(:one).id
+    assert_equal team.id, course.teams.find(:first).id
 
     assert_equal 1, course.teams.all.length, "course contains more teams than it should."
   end
