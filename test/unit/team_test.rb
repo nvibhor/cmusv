@@ -1,4 +1,7 @@
 require 'test_helper'
+require 'mocha'
+require 'gappsprovisioning/provisioningapi'
+include GAppsProvisioning
 
 class TeamTest < ActiveSupport::TestCase
 
@@ -143,18 +146,18 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_creating_course_and_team_relationship
-    course = course.create
+    course = Course.create
     team = course.teams.create
 
     # an id is assigned when they are committed to the database.
     assert_equal course.id, team.course.id
-    assert_equal team.id, course.teams.find(:first).id
+    assert_equal team.id, course.teams.find(:one).id
 
     assert_equal 1, course.teams.all.length, "course contains more teams than it should."
   end
 
   def test_deleting_team_removes_from_course
-    course = course.create
+    course = Course.create
     team = course.teams.create
 
     team_id = team.id
@@ -169,7 +172,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_deleting_course_should_delete_linked_team
-    course = course.create
+    course = Course.create
     team = course.teams.create
 
     team_id = team.id
@@ -220,7 +223,7 @@ class TeamTest < ActiveSupport::TestCase
 
 
   def test_team_email_uniqueness_enforced
-    course = course.create
+    course = Course.create
     team1 = course.teams.create
     team2 = course.teams.create
 
@@ -233,7 +236,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_team_old_email_set_to_email_after_initialization
-    course = course.create
+    course = Course.create
     team = course.teams.create
     team_id = team.id
     team.email = "address@host.com"
@@ -242,7 +245,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_team_strips_whitespace_from_name
-    course = course.create
+    course = Course.create
     team = course.teams.create
     team.name = " hello "
     team.save!
@@ -250,7 +253,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_team_updates_email_from_west_to_sv_with_name
-    course = course.create
+    course = Course.create
     team = course.teams.create
     team.name = "hello"
     team.email = "test@west.cmu.edu"
@@ -259,7 +262,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_team_updates_email_from_west_to_sv_without_name
-    course = course.create
+    course = Course.create
     team = course.teams.create
     team.email = "test@west.cmu.edu"
     team.save!
@@ -267,7 +270,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_add_person_to_team
-    course = course.create
+    course = Course.create
     team = course.teams.create
     sam = people(:student_sam)
     team.add_person_to_team(sam.human_name)
@@ -276,7 +279,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_accessors_for_team_members
-    course = course.create
+    course = Course.create
     team = course.teams.create
     team.person_name = people(:student_sam).human_name
     assert_equal team.person_name, people(:student_sam).human_name
@@ -293,31 +296,31 @@ class TeamTest < ActiveSupport::TestCase
     assert_equal 'can\'t be blank', team.errors.on(:email)
   end
 
- def test_group_name_extraction
-   course = course.create
-   team = course.teams.new(:email=>"test2@west.cmu.edu")
-   assert_equal team.google_group, "test2"
- end
+  def test_group_name_extraction
+    course = Course.create
+    team = course.teams.new(:email=>"test2@west.cmu.edu")
+    assert_equal team.google_group, "test2"
+  end
 
- def test_remove_person
-   team = team.new(:id=>1)
-   sam = people(:student_sam)
-   team.add_person_to_team(sam.human_name)
-   team.remove_person(sam.id)
-   assert !team.people.include?(sam)
- end
+  def test_remove_person
+    team = team.new(:id=>1)
+    sam = people(:student_sam)
+    team.add_person_to_team(sam.human_name)
+    team.remove_person(sam.id)
+    assert !team.people.include?(sam)
+  end
 
- def test_remove_person_also_removes_from_google_group
-   team = team.new(:id=>1)
-   team.name = " hello"
-   team.email = "test@sv.cmu.edu"
-   dal = people(:student_dal)
-   team.add_person_to_team(dal.human_name)
+  def test_remove_person_also_removes_from_google_group
+    team = team.new(:id=>1)
+    team.name = " hello"
+    team.email = "test@sv.cmu.edu"
+    dal = people(:student_dal)
+    team.add_person_to_team(dal.human_name)
 
-   provisioningapi.any_instance.expects(:remove_member_from_group).with(dal.email, team.google_group)
-   team.remove_person(dal.id)
-   assert !team.people.include?(dal)
- end
+    provisioningapi.any_instance.expects(:remove_member_from_group).with(dal.email, team.google_group)
+    team.remove_person(dal.id)
+    assert !team.people.include?(dal)
+  end
 
   def test_show_addresses_for_mailing_list
     team = team.new(:id=>1)
@@ -351,7 +354,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_update_google_mailing_list_with_only_old_group_exists
-    course = course.create
+    course = Course.create
     course.name = 'coursename'
     team = course.teams.create
     team.name = "hello"
@@ -370,7 +373,6 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_add_person_by_human_name
-    puts "HI"
     team = team.new(:id=>1)
     team.email = "test@west.cmu.edu"
     team.name = "hello"
