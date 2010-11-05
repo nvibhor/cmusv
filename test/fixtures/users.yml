@@ -89,3 +89,27 @@ faculty_frank:
 #  human_name: John Student
 #  image_uri: images/mascot.jpg
 
+student_sal:
+  id: 4
+  first_name: sal
+  last_name: student
+  human_name: student_sal
+  is_student: true
+  is_admin: false
+
+student_cal:
+  id: 5
+  first_name: cal
+  last_name: student
+  human_name: student_cal
+  is_student: true
+  is_admin: false
+
+student_dal:
+  id: 6
+  first_name: dal
+  last_name: student
+  human_name: student_dal
+  is_student: true
+  is_admin: false
+  

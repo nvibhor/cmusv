@@ -167,7 +167,7 @@ class TeamTest < ActiveSupport::TestCase
     assert_equal 0, course.teams.all.length, "destroying the team did not update the course."
 
     assert_raises activerecord::recordnotfound do
-      team.find(team_id)
+      Team.find(team_id)
     end
   end
 
@@ -180,7 +180,7 @@ class TeamTest < ActiveSupport::TestCase
     course.destroy
 
     assert_raises activerecord::recordnotfound do
-      team.find(team_id)
+      Team.find(team_id)
     end
   end
 
@@ -272,26 +272,25 @@ class TeamTest < ActiveSupport::TestCase
   def test_add_person_to_team
     course = Course.create
     team = course.teams.create
-    sam = people(:student_sam)
+    sam = users(:student_sam)
     team.add_person_to_team(sam.human_name)
-    team2 = team.find(team.id)
+    team2 = Team.find(team.id)
     assert team2.people.include?(sam)
   end
 
   def test_accessors_for_team_members
     course = Course.create
     team = course.teams.create
-    team.person_name = people(:student_sam).human_name
-    assert_equal team.person_name, people(:student_sam).human_name
-    team.person_name2 = people(:student_sam).human_name
-    assert_equal team.person_name2, people(:student_sam).human_name
-    team.person_name3 = people(:student_sam).human_name
-    assert_equal team.person_name3, people(:student_sam).human_name
-
+    team.person_name = users(:student_sam).human_name
+    assert_equal team.person_name, users(:student_sam).human_name
+    team.person_name2 = users(:student_sal).human_name
+    assert_equal team.person_name2, users(:student_sal).human_name
+    team.person_name3 = users(:student_dal).human_name
+    assert_equal team.person_name3, users(:student_dal).human_name
   end
 
   def test_team_creation_without_name_or_email
-    team = team.new(:course_id => courses(:one).id)
+    team = Team.new(:course_id => courses(:one).id)
     assert !team.valid?
     assert_equal 'can\'t be blank', team.errors.on(:email)
   end
@@ -303,18 +302,18 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_remove_person
-    team = team.new(:id=>1)
-    sam = people(:student_sam)
+    team = Team.new(:id=>1)
+    sam = users(:student_sam)
     team.add_person_to_team(sam.human_name)
     team.remove_person(sam.id)
     assert !team.people.include?(sam)
   end
 
   def test_remove_person_also_removes_from_google_group
-    team = team.new(:id=>1)
+    team = Team.new(:id=>1)
     team.name = " hello"
     team.email = "test@sv.cmu.edu"
-    dal = people(:student_dal)
+    dal = users(:student_dal)
     team.add_person_to_team(dal.human_name)
 
     provisioningapi.any_instance.expects(:remove_member_from_group).with(dal.email, team.google_group)
@@ -323,7 +322,7 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_show_addresses_for_mailing_list
-    team = team.new(:id=>1)
+    team = Team.new(:id=>1)
     team.name = " hello"
     team.email = "test@sv.cmu.edu"
     # assume that following are the members
@@ -339,13 +338,13 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_empty_faculty_email_address
-    team = team.new(:id=>1)
+    team = Team.new(:id=>1)
     faculty = team.faculty_email_addresses
     assert_equal faculty.length, 0
   end
 
   def test_faculty_email_address
-    team = team.new(:id=>1)
+    team = Team.new(:id=>1)
     team.primary_faculty = users(:faculty_frank)
     team.secondary_faculty = users(:faculty_frank)
     faculty = team.faculty_email_addresses
@@ -358,7 +357,7 @@ class TeamTest < ActiveSupport::TestCase
     course.name = 'coursename'
     team = course.teams.create
     team.name = "hello"
-    team.add_person_to_team(people(:student_dal).human_name)
+    team.add_person_to_team(users(:student_dal).human_name)
     team.email = "test@west.cmu.edu"
     old_group = mock()
     old_group_name = 'old_group@someemail.web'
@@ -373,10 +372,10 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_add_person_by_human_name
-    team = team.new(:id=>1)
+    team = Team.new(:id=>1)
     team.email = "test@west.cmu.edu"
     team.name = "hello"
-    dal = people(:student_dal)
+    dal = users(:student_dal)
     provisioningapi.any_instance.expects(:add_member_to_group).with('dal@sv.cmu.edu', 'test')
     team.add_person_by_human_name(dal.human_name)
   end
