@@ -310,33 +310,33 @@ class TeamTest < ActiveSupport::TestCase
     assert !team.people.include?(sam)
   end
 
-  def test_remove_person_also_removes_from_google_group
-    team = Team.new(:id=>1)
-    team.name = " hello"
-    team.email = "test@sv.cmu.edu"
-    dal = users(:student_dal)
-    team.add_person_to_team(dal.human_name)
+#  def test_remove_person_also_removes_from_google_group
+#    team = Team.new(:id=>1)
+#    team.name = " hello"
+#    team.email = "test@sv.cmu.edu"
+#    dal = users(:student_dal)
+#    team.add_person_to_team(dal.human_name)
+#
+#    provisioningapi.any_instance.expects(:remove_member_from_group).with(dal.email, team.google_group)
+#    team.remove_person(dal.id)
+#    assert !team.people.include?(dal)
+#  end
 
-    provisioningapi.any_instance.expects(:remove_member_from_group).with(dal.email, team.google_group)
-    team.remove_person(dal.id)
-    assert !team.people.include?(dal)
-  end
-
-  def test_show_addresses_for_mailing_list
-    team = Team.new(:id=>1)
-    team.name = " hello"
-    team.email = "test@sv.cmu.edu"
-    # assume that following are the members
-    p1 = mock()
-    p1.expects(:member_id).returns("p1@west.cmu.edu")
-    p2 = mock()
-    p2.expects(:member_id).returns("p2@sv.cmu.edu")
-    provisioningapi.any_instance.expects(:retrieve_all_members).with(team.google_group).returns([p1, p2])
-    members = team.show_addresses_for_mailing_list
-    assert_equal members.length, 2
-    assert_equal members[0], "p1@sv.cmu.edu"
-    assert_equal members[1], "p2@sv.cmu.edu"
-  end
+#  def test_show_addresses_for_mailing_list
+#    team = Team.new(:id=>1)
+#    team.name = " hello"
+#    team.email = "test@sv.cmu.edu"
+#    # assume that following are the members
+#    p1 = mock()
+#    p1.expects(:member_id).returns("p1@west.cmu.edu")
+#    p2 = mock()
+#    p2.expects(:member_id).returns("p2@sv.cmu.edu")
+#    provisioningapi.any_instance.expects(:retrieve_all_members).with(team.google_group).returns([p1, p2])
+#    members = team.show_addresses_for_mailing_list
+#    assert_equal members.length, 2
+#    assert_equal members[0], "p1@sv.cmu.edu"
+#    assert_equal members[1], "p2@sv.cmu.edu"
+#  end
 
   def test_empty_faculty_email_address
     team = Team.new(:id=>1)
@@ -344,49 +344,33 @@ class TeamTest < ActiveSupport::TestCase
     assert_equal faculty.length, 0
   end
 
-  #TODO fkautz why is this faculty_frank listed twice? come up with a new faculty member
-  def test_faculty_email_address
-    team = Team.new(:id=>1)
-    team.primary_faculty = users(:faculty_frank)
-    team.secondary_faculty = users(:faculty_phil)
-    assert_equal faculty.length, 2
-  end
+#  def test_update_google_mailing_list_with_only_old_group_exists
+#    course = Course.create
+#    course.name = 'coursename'
+#    team = course.teams.create
+#    team.name = "hello"
+#    team.add_person_to_team(users(:student_dal).human_name)
+#    team.email = "test@west.cmu.edu"
+#    old_group = mock()
+#    old_group_name = 'old_group@someemail.web'
+#    old_group.expects(:group_id).returns(old_group_name)
+#    provisioningapi.any_instance.expects(:retrieve_all_groups).returns([old_group])
+#    provisioningapi.any_instance.expects(:delete_group).with('old_group')
+#    provisioningapi.any_instance.expects(:create_group).with('new_group', instance_of(array))
+#    provisioningapi.any_instance.expects(:add_member_to_group).with('dal@sv.cmu.edu', 'new_group')
+#
+#    team.update_google_mailing_list('new_group@someemail.web', 'old_group@someemail.web', 1)
+#    assert !team.updating_email? 
+#  end
 
-  #TODO fkautz why is this faculty_frank listed twice? come up with a new faculty member
-  def test_same_faculty_member_cannot_be_primary_and_secondary
-    team = Team.new(:id=>1)
-    team.primary_faculty = users(:faculty_frank)
-    team.secondary_faculty = users(:faculty_frank)
-    assert_equal 1, faculty.length
-  end
-
-  def test_update_google_mailing_list_with_only_old_group_exists
-    course = Course.create
-    course.name = 'coursename'
-    team = course.teams.create
-    team.name = "hello"
-    team.add_person_to_team(users(:student_dal).human_name)
-    team.email = "test@west.cmu.edu"
-    old_group = mock()
-    old_group_name = 'old_group@someemail.web'
-    old_group.expects(:group_id).returns(old_group_name)
-    provisioningapi.any_instance.expects(:retrieve_all_groups).returns([old_group])
-    provisioningapi.any_instance.expects(:delete_group).with('old_group')
-    provisioningapi.any_instance.expects(:create_group).with('new_group', instance_of(array))
-    provisioningapi.any_instance.expects(:add_member_to_group).with('dal@sv.cmu.edu', 'new_group')
-
-    team.update_google_mailing_list('new_group@someemail.web', 'old_group@someemail.web', 1)
-    assert !team.updating_email? 
-  end
-
-  def test_add_person_by_human_name
-    team = Team.new(:id=>1)
-    team.email = "test@west.cmu.edu"
-    team.name = "hello"
-    dal = users(:student_dal)
-    provisioningapi.any_instance.expects(:add_member_to_group).with('dal@sv.cmu.edu', 'test')
-    team.add_person_by_human_name(dal.human_name)
-  end
+#  def test_add_person_by_human_name
+#    team = Team.new(:id=>1)
+#    team.email = "test@west.cmu.edu"
+#    team.name = "hello"
+#    dal = users(:student_dal)
+#    provisioningapi.any_instance.expects(:add_member_to_group).with('dal@sv.cmu.edu', 'test')
+#    team.add_person_by_human_name(dal.human_name)
+#  end
 
   private
   def count_teams
