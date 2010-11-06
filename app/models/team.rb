@@ -143,22 +143,22 @@ class Team < ActiveRecord::Base
   
   
   def person_name
-    
+    self.people[0].human_name
   end
   def person_name2
-    
+    self.people[1].human_name
   end
   def person_name3
-    
+    self.people[2].human_name
   end
   def person_name4
-    
+    self.people[3].human_name
   end
   def person_name5
-    
+    self.people[4].human_name
   end
   def person_name6
-    
+    self.people[5].human_name
   end
 
   def add_person_to_team(name)
