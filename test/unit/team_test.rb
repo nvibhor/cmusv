@@ -253,13 +253,15 @@ class TeamTest < ActiveSupport::TestCase
     assert_equal "hello", team.name
   end
 
-  def test_team_updates_email_from_west_to_sv
+  def test_team_generates_email_address
     course = Course.create
+    course.semester = "fall"
+    course.year = 2010
+    course.save
     team = course.teams.create
     team.name = "hello"
-    team.email = "test@west.cmu.edu"
     team.save!
-    assert_equal "test@sv.cmu.edu", team.email
+    assert_equal "fall-2010-hello@#{GOOGLE_DOMAIN}", team.email
   end
 
   # This appears to work when i run this in irb. Need to investigate this further.

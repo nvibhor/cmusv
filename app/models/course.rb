@@ -1,5 +1,5 @@
 class Course < ActiveRecord::Base
-  has_many :teams
+  has_many :teams, :dependent => :destroy
   belongs_to :course_number
   has_many :pages, :order => "position"
 

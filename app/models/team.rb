@@ -7,7 +7,7 @@ class Team < ActiveRecord::Base
   
   validates_presence_of     :course_id
   validates_uniqueness_of   :email, :allow_blank => true, :message => "The team name has already be used in this semester. Pick another name"
-  
+
 #  validates_each :person_name, :person_name2, :allow_nil, :allow_blank do |record, attr, value|
 #      record.errors.add attr, 'Person does not exist' if Person.find_by_human_name(value).nil?
 #  end
@@ -29,7 +29,6 @@ class Team < ActiveRecord::Base
     return unless self.old_email != self.email|| self.team_members_list_changed
 
     self.updating_email = true
-    logger.debug("team.before_save() executed")
 #    update_google_mailing_list(self.email, self.old_email, self.id)
 #    self.send_later(:update_google_mailing_list, self.email, self.old_email, self.id)
     self.delay.update_google_mailing_list self.email, self.old_email, self.id
