@@ -29,6 +29,18 @@ class DeliverableSubmissionsController < ApplicationController
   # GET /deliverable_submissions/new.xml
   def new
     @deliverable_submission = DeliverableSubmission.new
+    if params[:course_id]
+      course_id = params[:course_id].to_param
+      # Ensure that course_id supplied is valid.
+      # TODO(vibhor): Test this
+      if Course.exists?(course_id)
+        @course = Course.find(course_id)
+        # Do not accept task_number if course_id supplied is not valid.
+        if (params[:task_number])
+          @task_number = params[:task_number].to_param
+        end
+      end
+    end
 
     respond_to do |format|
       format.html # new.html.erb

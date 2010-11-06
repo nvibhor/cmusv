@@ -1,6 +1,8 @@
 <% content_for :title, "New submission" %>
 <h1>New deliverable submission</h1>
 
-<%= render :partial => "editable_deliverable_submission",:locals => { :button_name => "Create" } %>
+<%= render :partial => "editable_deliverable_submission",
+           :locals => { :button_name => "Create", :course => @course,
+                        :task_number => @task_number } %>
 
 <%= link_to 'Back', deliverable_submissions_path %><br/>

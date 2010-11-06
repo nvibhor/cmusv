@@ -1,9 +1,20 @@
+<% if not course.nil?
+  @deliverable_submission.course = course
+end %>
+<% if not task_number.nil?
+  @deliverable_submission.task_number = task_number
+end %>
+
 <% form_for @deliverable_submission,  :html => { :multipart => true } do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.label :course_id %>&nbsp;
-    <%= f.collection_select(:course_id, Course.find(:all), :id, :name,
-      {:prompt => 'Select course'}) %>
+    <%= f.label :course_id %>:&nbsp;
+    <% if @deliverable_submission.course.nil? %>
+      <%= f.collection_select(:course_id, Course.find(:all), :id, :name,
+        {:prompt => 'Select course'}) %>
+    <% else %>
+       <%= course.name %>
+    <% end %>
   </p>
   <p>
     <%= f.check_box :is_individual, :onchange => "toggleTeamSelector(this);" %>
@@ -16,8 +27,13 @@
       {:prompt => 'Select team'}) %>
   </p>
   <p>
-    <%= f.label :task_number %><br />
-    <%= f.text_field :task_number %>
+    <%= f.label :task_number %>:&nbsp;&nbsp;
+    <% if @deliverable_submission.task_number.nil? %>
+      <%= f.text_field :task_number %>
+    <% else %>
+      <%= task_number %>
+   <% end %>
+
   </p>
   <p>
     <%= f.label 'Upload file' %>&nbsp;
