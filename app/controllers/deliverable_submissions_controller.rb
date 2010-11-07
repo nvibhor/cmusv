@@ -34,10 +34,14 @@ class DeliverableSubmissionsController < ApplicationController
       # Ensure that course_id supplied is valid.
       # TODO(vibhor): Test this
       if Course.exists?(course_id)
-        @course = Course.find(course_id)
-        # Do not accept task_number if course_id supplied is not valid.
-        if (params[:task_number])
-          @task_number = params[:task_number].to_param
+        team = user_team_enrolled_in_course(course_id)
+        if (not team.nil?)
+          @deliverable_submission.course = Course.find(course_id)
+          @deliverable_submission.team = team
+          # Do not accept task_number if course_id supplied is not valid.
+          if (params[:task_number])
+            @deliverable_submission.task_number = params[:task_number].to_param
+          end
         end
       end
     end
@@ -106,5 +110,16 @@ class DeliverableSubmissionsController < ApplicationController
       format.html { redirect_to(deliverable_submissions_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+  def user_team_enrolled_in_course(course_id)
+    # NOTE(vibhor): is checking for current semester courses only relevant?
+    Person.find(current_user.id).teams.each do |t|
+      if (t.course == Course.find(course_id))
+        return t
+      end
+    end
+    return nil  
   end
 end
