@@ -7,7 +7,15 @@ describe DeliverableSubmissionsController do
 
   describe "NEW deliverable_submission" do
 
+    before(:each) do
+      todd = Factory.create(:staff)
+      architecture = Factory.create(:architecture)
+      team = Factory.create(:team, :primary_faculty_id => todd.id, :course_id => architecture.id)
+    end
+
     it "must have an individual checkbox" do
+      activate_authlogic
+      UserSession.create users(:student_sam)
       get :new
       response.should be_success
       response.should have_tag("input", :type => "checkbox")

@@ -2,12 +2,6 @@ require 'spec_helper'
 
 describe Course do
 
-  Factory.define :course, :class => Course do |c|
-    c.name 'Course'
-    c.semester ApplicationController.current_semester
-    c.year  Date.today.year
-    c.mini 'Both'
-   end
 
   Factory.define :fse, :parent => :course do |c|
     c.name 'Foundations of Software Engineering'
