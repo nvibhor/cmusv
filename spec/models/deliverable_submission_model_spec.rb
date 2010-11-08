@@ -2,68 +2,14 @@ require 'spec_helper'
 
 describe DeliverableSubmission do
 
-  Factory.sequence :login do |n|
-    "person#{n}"
+
+  before(:each) do
+    todd = Factory.create(:staff)
+    architecture = Factory.create(:architecture)
+    # team = Factory.create(:team, :primary_faculty_id => todd.id, :course_id => architecture.id)
+    team = Factory.create(:team)
   end
 
-  Factory.define :person, :class => Person do |p|
-    p.is_staff 0
-    p.is_active 1
-    p.image_uri "/images/mascot.jpg"
-  end
-
-  Factory.define :todd, :parent => :person do |p|
-    p.persistence_token Time.now.to_f.to_s
-    p.first_name "Todd"
-    p.last_name "Sedano"
-    p.human_name "Todd Sedano"
-    p.email "todd.sedano@sv.cmu.edu"
-    p.is_staff 1
-  end
-
-  todd = Factory.create(:todd)
-
-  Factory.define :user do |u|
-    u.login 'bobs'
-    u.email {|a| "#{a.first_name}.#{a.last_name}@andrew.cmu.edu" }
-    u.is_student true
-    u.is_staff false
-    u.is_teacher false
-    u.is_admin false
-    u.is_alumnus false
-    u.first_name 'Student'
-    u.last_name 'Baba'
-    u.human_name {|a| "#{a.first_name} #{a.last_name}" }
-    u.image_uri 'images/mascot.jpg'
-    u.password 'testararar'
-    u.password_confirmation 'testararar'
-  end
-  
-
-  Factory.define :architecture, :class => Course do |c|
-   c.name "Architecture"
-   c.number "96-705"
-   c.semester "Summer"
-   c.mini "Both"
-   c.year "2008"
-  end
-
-  architecture = Factory.create(:architecture)
-
-  Factory.define :team, :class => Team do |t|
-   t.name "Team"
-   t.email "team@sv.cmu.edu"
-  end
-
-  team = Factory.create(:team, :primary_faculty_id => todd.id, :course_id => architecture.id)
-
-  Factory.define :deliverable_submission do |d|
-    d.submission_date Date.today
-    d.association :person_id, :factory => :user
-    d.deliverable_file_name 'task1.zip'
-    d.course architecture
-    d.team team
-  end
 
   it "is valid with valid attributes" do 
     submission = Factory(:deliverable_submission)
@@ -91,8 +37,7 @@ describe DeliverableSubmission do
   end
 
   it " is not valid without a submitter" do
-    submission = Factory.build(:deliverable_submission)
-    submission.person_id = nil
+    submission = Factory.build(:deliverable_submission, :person => nil)
     submission.should_not be_valid
   end
 
@@ -103,8 +48,8 @@ describe DeliverableSubmission do
   end
 
   it " is not valid with an invalid submitter" do
-    submission = Factory.build(:deliverable_submission)
-    submission.person_id = User.last.id + 1
+    person = Factory.build(:person) # an unsaved person.
+    submission = Factory.build(:deliverable_submission, :person => person)
     submission.should_not be_valid
   end
 

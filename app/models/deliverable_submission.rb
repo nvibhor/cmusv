@@ -4,8 +4,8 @@ class DeliverableSubmission < ActiveRecord::Base
   belongs_to :team
 
   validates_presence_of :person
-  validates_presence_of :submission_date
   validates_associated :person
+  validates_presence_of :submission_date
   validates_presence_of :course
 
   # TODO(vibhor): Update to use amazon s3 as storage.

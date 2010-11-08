@@ -9,7 +9,7 @@ one:
   deliverable_file_name: MyString
   deliverable_content_type: MyString
   deliverable_file_size: 1
-  team: one
+  team: teamOne
 
 two:
   submission_date: 2010-10-29 20:56:04
@@ -20,4 +20,4 @@ two:
   deliverable_file_name: MyString
   deliverable_content_type: MyString
   deliverable_file_size: 1
-  team: one
+  team: teamTwo
