@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe DeliverableSubmission do
+  before(:each) do
+    @todd = Factory.create(:staff)
+    @architecture = Factory.create(:architecture)
+    # @team = Factory.create(:team, :primary_faculty_id => todd.id, :course_id => architecture.id)
+    @team = Factory.create(:team)
+  end
+
 # NOTE(vibhor): Can't get this test to pass because I am not able to setup a team people association using factories.
 #  it "adds a team for team deliverable after save" do
 #    submission = Factory(:deliverable_submission)
@@ -11,7 +18,7 @@ describe DeliverableSubmission do
 #    assert submission.team.equals(team)
 #  end
 
-  it "is valid with valid attributes" do
+  it "is valid with valid attributes" do 
     submission = Factory(:deliverable_submission)
     submission.should be_valid
     submission.person.should be_valid
@@ -52,6 +59,54 @@ describe DeliverableSubmission do
     submission.deliverable_file_name = ""
     submission.should_not be_valid
   end
+  
+  describe "determines access for" do
+    before(:each) do
+      @submission = Factory.create(:deliverable_submission)
+      @submission.is_individual = false
+      @submission.team = @team
+      people = Person.find(:all, :conditions => {:is_student => true})
+      @team_members = people.slice(0,4) - [@submission.person]
+      @team.people = @team_members + [@submission.person]
+    end
 
+    it "a nil user (unauthorized)" do
+      result = @submission.is_accessible_by(nil)
+      assert_equal false, result, "Deliverable should not be accessible to a nil user"
+    end
 
+    it "an owner of an individual deliverable (authorized)" do
+      @submission.is_individual = true
+      @submission.team = nil
+      result = @submission.is_accessible_by(@submission.person)
+      assert_equal true, result, "Deliverable should be accessible to its owner"
+    end
+
+    it "an owner of a team deliverable (authorized)" do
+      result = @submission.is_accessible_by(@submission.person)
+    end
+
+    it "a non-member of a team deliverable who is not the owner (unauthorized)" do
+      team_members = @team.people - [@submission.person]
+      unauthorized_user = team_members.pop
+      @team.people = @team.people - [unauthorized_user]
+      assert_not_nil team_members[0]
+      result = @submission.is_accessible_by(unauthorized_user)
+      assert_equal false, result, "Deliverable should not be accessible to non-team members"
+    end
+
+    it "a member of a team deliverable who is not the owner (authorized)" do
+      team_members = @team.people - [@submission.person]
+      assert_not_nil team_members[0]
+      result = @submission.is_accessible_by(team_members[0])
+      assert_equal true, result, "Deliverable should be accessible to team members"
+    end
+
+    it "a staff member (authorized)" do
+      @todd.is_student = false
+      @todd.is_staff = true
+      result = @submission.is_accessible_by(@todd)
+      assert_equal true, result, "Deliverable should be accessible to faculty members"
+    end
+  end
 end
