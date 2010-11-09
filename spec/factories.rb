@@ -49,5 +49,4 @@ Factory.define :deliverable_submission do |d|
   d.association :person, :factory => :student
   d.sequence(:deliverable_file_name) { |n|  "task#{n}.zip" }
   d.association :course
-  d.association :team
 end

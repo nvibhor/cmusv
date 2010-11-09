@@ -16,9 +16,13 @@ class DeliverableSubmission < ActiveRecord::Base
 
   validates_attachment_presence :deliverable
 
-  validate do |submission|
-    if not submission.is_individual? and submission.team.nil?
-      submission.errors.add_to_base("Deliverable should have a team name or make it an individual deliverable.")
+  def before_save
+    if not self.is_individual?
+      self.person.teams.each do |t|
+        if (t.course == self.course)
+          self.team = t
+        end
+      end
     end
   end
 end

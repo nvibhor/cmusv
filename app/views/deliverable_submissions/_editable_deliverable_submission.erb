@@ -6,15 +6,9 @@
                             {:prompt => 'Select course'}) %>
   </p>
   <p>
-    <%= f.check_box :is_individual, :onchange => "toggleTeamSelector(this);" %>
+    <%= f.check_box :is_individual%>
     <%= f.label 'Individual deliverable' %>
  </p>
-  <!-- TODO(vibhor): The selected course should automatically select the team. -->
-  <p id="team-selector">
-    <%= f.label 'Team' %>&nbsp;
-    <%= f.collection_select(:team_id, find_current_semester_teams, :id, :name,
-      {:prompt => 'Select team'}) %>
-  </p>
   <p>
     <%= f.label :task_number %>:&nbsp;&nbsp;
     <%= f.text_field :task_number %>
@@ -31,11 +25,3 @@
     <%= f.submit button_name %>
   </p>
 <% end %>
-<script>
-  <!--
-  // Hide/show team selector depending on the state of is_individual checkbox.
-  function toggleTeamSelector(checkBox) {
-    $('team-selector').style['display'] = checkBox.checked ? 'none' : 'block';
-  }
-  -->
-</script>
