@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 describe DeliverableSubmission do
-# NOTE(vibhor): Can't get this test to pass because I am not able to setup a team people association using factories.
-#  it "adds a team for team deliverable after save" do
-#    submission = Factory(:deliverable_submission)
-#    submission.is_individual = false
-#    submission.team = nil
-#    submission.course = Factory(:architecture)
-#    submission.save!
-#    assert submission.team.equals(team)
-#  end
+
+  it "adds a team for team deliverable after save" do
+    course = Factory(:metrics)
+    sam = Factory.create(:student, :first_name => 'Sam')
+    becky = Factory.create(:student, :first_name => 'Becky')
+    team = Factory(:team, :people => [sam, becky], :course => course)
+    submission = Factory(:deliverable_submission, :is_individual => false, :course => course, :person => sam)
+    assert_equal submission.team, team
+  end
 
   it "is valid with valid attributes" do
     submission = Factory(:deliverable_submission)
@@ -35,7 +35,7 @@ describe DeliverableSubmission do
   end
 
   it " is not valid with an invalid submitter" do
-    person = Factory.build(:person) # an unsaved person.
+    person = Factory.build(:default_person) # an unsaved person.
     submission = Factory.build(:deliverable_submission, :person => person)
     submission.should_not be_valid
   end
