@@ -21,4 +21,29 @@ class DeliverableSubmission < ActiveRecord::Base
       submission.errors.add_to_base("Deliverable should have a team name or make it an individual deliverable.")
     end
   end
+
+  def is_accessible_by(user)
+    access = false
+    if not user.nil?
+      # owner
+      if self.person == user
+        access = true
+      end
+
+      # faculty member
+      if user.is_staff == true
+        access = true
+      end
+
+      # team member in team deliverable
+      if self.is_individual == false
+        if not self.team.nil?
+          if self.team.people.include?(user)
+            access = true
+          end
+        end
+      end
+    end
+    access
+  end
 end
