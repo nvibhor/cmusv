@@ -4,19 +4,17 @@ describe DeliverableSubmission do
   before(:each) do
     @todd = Factory.create(:staff)
     @architecture = Factory.create(:architecture)
-    # @team = Factory.create(:team, :primary_faculty_id => todd.id, :course_id => architecture.id)
     @team = Factory.create(:team)
   end
 
-# NOTE(vibhor): Can't get this test to pass because I am not able to setup a team people association using factories.
-#  it "adds a team for team deliverable after save" do
-#    submission = Factory(:deliverable_submission)
-#    submission.is_individual = false
-#    submission.team = nil
-#    submission.course = Factory(:architecture)
-#    submission.save!
-#    assert submission.team.equals(team)
-#  end
+  it "adds a team for team deliverable after save" do
+    course = Factory(:metrics)
+    sam = Factory.create(:student, :first_name => 'Sam')
+    becky = Factory.create(:student, :first_name => 'Becky')
+    team = Factory(:team, :people => [sam, becky], :course => course)
+    submission = Factory(:deliverable_submission, :is_individual => false, :course => course, :person => sam)
+    assert_equal submission.team, team
+  end
 
   it "is valid with valid attributes" do 
     submission = Factory(:deliverable_submission)
@@ -42,7 +40,7 @@ describe DeliverableSubmission do
   end
 
   it " is not valid with an invalid submitter" do
-    person = Factory.build(:person) # an unsaved person.
+    person = Factory.build(:default_person) # an unsaved person.
     submission = Factory.build(:deliverable_submission, :person => person)
     submission.should_not be_valid
   end
@@ -62,7 +60,7 @@ describe DeliverableSubmission do
   
   describe "determines access for" do
     before(:each) do
-      @submission = Factory.create(:deliverable_submission)
+      @submission = Factory.create(:deliverable_submission_with_team)
       @submission.is_individual = false
       @submission.team = @team
       people = Person.find(:all, :conditions => {:is_student => true})
@@ -90,7 +88,6 @@ describe DeliverableSubmission do
       team_members = @team.people - [@submission.person]
       unauthorized_user = team_members.pop
       @team.people = @team.people - [unauthorized_user]
-      assert_not_nil team_members[0]
       result = @submission.is_accessible_by(unauthorized_user)
       assert_equal false, result, "Deliverable should not be accessible to non-team members"
     end

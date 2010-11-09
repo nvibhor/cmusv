@@ -9,8 +9,8 @@ describe DeliverableSubmissionsController do
 
     before(:each) do
       todd = Factory.create(:staff)
-      architecture = Factory.create(:architecture)
-      team = Factory.create(:team, :primary_faculty_id => todd.id, :course_id => architecture.id)
+      metrics = Factory.create(:metrics)
+      team = Factory.create(:team, :primary_faculty_id => todd.id, :course_id => metrics.id)
     end
 
     it "must have an individual checkbox" do
