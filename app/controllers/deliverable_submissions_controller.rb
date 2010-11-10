@@ -29,6 +29,22 @@ class DeliverableSubmissionsController < ApplicationController
   # GET /deliverable_submissions/new.xml
   def new
     @deliverable_submission = DeliverableSubmission.new
+    if params[:course_id]
+      course_id = params[:course_id].to_param
+      # Ensure that course_id supplied is valid.
+      # TODO(vibhor): Test this
+      if Course.exists?(course_id)
+        team = user_team_enrolled_in_course(course_id)
+        if (not team.nil?)
+          @deliverable_submission.course = Course.find(course_id)
+          @deliverable_submission.team = team
+          # Do not accept task_number if course_id supplied is not valid.
+          if (params[:task_number])
+            @deliverable_submission.task_number = params[:task_number].to_param
+          end
+        end
+      end
+    end
 
     respond_to do |format|
       format.html # new.html.erb
@@ -98,35 +114,43 @@ class DeliverableSubmissionsController < ApplicationController
   end
 
   private
-  def send_email()
-    # construct message consisting of who submitted, their team, course id (name), task number
-    teams = Team.find(:all, :order => "id", :conditions => ["course_id = ?", @deliverable_submission.course_id])
-
-    team = Team.new
-    
-    # Go through teams and try to find which teams in this course has this person.
-    teams.each do |t|
-      if(t.people.find(:first,  :conditions => ["id = ?", @deliverable_submission.person_id] )!=nil)
-        team = t
-        break
+  def user_team_enrolled_in_course(course_id)
+    # NOTE(vibhor): is checking for current semester courses only relevant?
+    Person.find(current_user.id).teams.each do |t|
+      if (t.course == Course.find(course_id))
+        return t
       end
     end
+    return nil  
+  end
 
-    message = "Submitted By : " + @deliverable_submission.person.human_name + " from Team : " + team.name + "\n"
-    message += "Course ID : " + @deliverable_submission.course.name + " Task # : " + @deliverable_submission.task_number.to_s
-    message += "\nComments : " + @deliverable_submission.comments;
+  def send_email()
+    # construct message consisting of who submitted, their team, course id (name), task number
+    team = nil
+    team = user_team_enrolled_in_course(@deliverable_submission.course_id)
 
-    faculty = User.find_by_id(team.primary_faculty_id)
-    if(!faculty.nil?)
-       toaddress = faculty.email
-    else
-      toaddress = "anthony.tang@west.cmu.edu"
+    # Team should always exist
+    if not team.nil?
+      message = "Submitted By : " + @deliverable_submission.person.human_name + "\n"
+      if not @deliverable_submission.is_individual?
+        message += "From Team : " + team.name + "\n"
+      end
+
+      message += "Course ID : " + @deliverable_submission.course.name + " Task # : " + @deliverable_submission.task_number.to_s
+      message += "\nComments : " + @deliverable_submission.comments;
+
+      faculty = User.find_by_id(team.primary_faculty_id)
+
+      # Faculty should never be nil, if somehow they are, then don't send message
+      if !faculty.nil?
+         toaddress = faculty.email
+
+       GenericMailer.deliver_email(
+         :to => toaddress,
+         :subject => "Deliverable Submission",
+         :message => message
+        )
+      end
     end
-
-     GenericMailer.deliver_email(
-       :to => toaddress,
-       :subject => "Deliverable Submission",
-       :message => message
-      )
   end
 end

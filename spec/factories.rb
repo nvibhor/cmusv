@@ -1,7 +1,5 @@
-Factory.define :person, :class => Person do |p|
-  p.is_staff 0
-  p.is_active 1
-  p.image_uri "/images/mascot.jpg"
+
+Factory.define :default_person, :class => Person do |p|
   p.is_teacher false
   p.is_admin false
   p.is_alumnus false
@@ -9,7 +7,7 @@ Factory.define :person, :class => Person do |p|
   p.human_name {|a| "#{a.first_name} #{a.last_name}" }
 end
 
-Factory.define :staff, :parent => :person do |p|
+Factory.define :staff, :parent => :default_person do |p|
   p.persistence_token Time.now.to_f.to_s
   p.login "toddf"
   p.first_name "Todd"
@@ -19,7 +17,7 @@ Factory.define :staff, :parent => :person do |p|
   p.is_staff 1
 end
 
-Factory.define :student, :parent => :person do |u|
+Factory.define :student, :parent => :default_person do |u|
   u.sequence(:login) { |n| "student#{n}" }
   u.email {|a| "#{a.first_name}.#{a.last_name}@andrew.cmu.edu" }
   u.is_student true
@@ -39,9 +37,14 @@ Factory.define :architecture, :parent => :course do |c|
   c.number "96-705"
 end
 
+Factory.define :metrics, :parent => :course do |c|
+  c.name "Metrics"
+  c.number "96-705"
+end
+
 Factory.define :team, :class => Team do |t|
   t.sequence(:name) { |x|  "Team #{x}" }
-  t.association :course, :factory => :architecture
+  t.association :course, :factory => :metrics
 end
 
 Factory.define :deliverable_submission do |d|
@@ -49,5 +52,8 @@ Factory.define :deliverable_submission do |d|
   d.association :person, :factory => :student
   d.sequence(:deliverable_file_name) { |n|  "task#{n}.zip" }
   d.association :course
+end
+
+Factory.define :deliverable_submission_with_team, :parent => :deliverable_submission do |d|
   d.association :team
 end
