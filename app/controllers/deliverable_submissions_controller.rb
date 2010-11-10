@@ -113,6 +113,16 @@ class DeliverableSubmissionsController < ApplicationController
     end
   end
 
+  #GET /download/:id/:version/:file.:ext
+  def download
+    download = DeliverableSubmission.find(params[:id])
+    if download.is_accessible_by(current_user)
+      send_file("deliverable_submissions/#{download.id}/#{download.deliverable_file_name}", {:filename => download.deliverable_file_name, :stream => false})
+    else
+      redirect_to :action => 'index'
+    end
+  end
+
   private
   def user_team_enrolled_in_course(course_id)
     # NOTE(vibhor): is checking for current semester courses only relevant?
