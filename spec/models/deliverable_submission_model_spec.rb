@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DeliverableSubmission do
   before(:each) do
     @todd = Factory.create(:staff)
-    @architecture = Factory.create(:architecture)
+    @metrics = Factory.create(:metrics)
     @team = Factory.create(:team)
   end
 

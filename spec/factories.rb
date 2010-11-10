@@ -32,11 +32,6 @@ Factory.define :course, :class => Course do |c|
   c.mini 'Both'
 end
 
-Factory.define :architecture, :parent => :course do |c|
-  c.name "Architecture"
-  c.number "96-705"
-end
-
 Factory.define :metrics, :parent => :course do |c|
   c.name "Metrics"
   c.number "96-705"
