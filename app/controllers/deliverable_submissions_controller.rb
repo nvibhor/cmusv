@@ -72,6 +72,7 @@ class DeliverableSubmissionsController < ApplicationController
 
     respond_to do |format|
       if @deliverable_submission.save
+        send_faculty_email
         flash[:notice] = 'DeliverableSubmission was successfully created.'
         format.html { redirect_to(@deliverable_submission) }
         format.xml  { render :xml => @deliverable_submission, :status => :created, :location => @deliverable_submission }
@@ -121,5 +122,35 @@ class DeliverableSubmissionsController < ApplicationController
       end
     end
     return nil  
+  end
+
+  def send_faculty_email()
+    # construct message consisting of who submitted, their team, course id (name), task number
+    team = nil
+    team = user_team_enrolled_in_course(@deliverable_submission.course_id)
+
+    # Team should always exist
+    if not team.nil?
+      message = "Submitted By : " + @deliverable_submission.person.human_name + "\n"
+      if not @deliverable_submission.is_individual?
+        message += "From Team : " + team.name + "\n"
+      end
+
+      message += "Course ID : " + @deliverable_submission.course.name + " Task # : " + @deliverable_submission.task_number.to_s
+      message += "\nComments : " + @deliverable_submission.comments;
+
+      faculty = User.find_by_id(team.primary_faculty_id)
+
+      # Faculty should never be nil, if somehow they are, then don't send message
+      if !faculty.nil?
+         toaddress = faculty.email
+
+       GenericMailer.deliver_email(
+         :to => toaddress,
+         :subject => "Deliverable Submission",
+         :message => message
+        )
+      end
+    end
   end
 end
