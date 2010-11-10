@@ -26,19 +26,25 @@ class DeliverableSubmission < ActiveRecord::Base
     end
   end
 
+  # editable wrapper
+  def editable?(current_user)
+    is_accessible_by(current_user)
+  end
+
+
   def is_accessible_by(user)
     access = false
     if not user.nil?
       # owner
-      if self.person == user
+      if self.person_id == user.id
         access = true
       end
-
+  
       # faculty member
       if user.is_staff == true
         access = true
       end
-
+      
       # team member in team deliverable
       if self.is_individual == false
         if not self.team.nil?
