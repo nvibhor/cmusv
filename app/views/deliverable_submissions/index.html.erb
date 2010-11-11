@@ -22,7 +22,11 @@
       <td>n/a</td>
     <% else %>
       <td>No</td>
-      <td><%=h deliverable_submission.team.name %></td>
+      <td>
+        <% if not deliverable_submission.team.nil?%>
+          <%=h deliverable_submission.team.name %>
+        <% end %>
+      </td>
     <% end %>
     <td><%=h deliverable_submission.task_number %></td>
     <td><%= link_to h(deliverable_submission.deliverable_file_name), deliverable_submission.deliverable.url %></td>

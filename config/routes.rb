@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   # TODO: we should explicitly list the actions that we are allowing here.
+  map.connect 'deliverable_submissions/download/:id', :controller => 'deliverable_submissions', :action => 'download'
   map.resources :deliverable_submissions
 
 

@@ -7,6 +7,7 @@ class DeliverableSubmissionsController < ApplicationController
   # GET /deliverable_submissions.xml
   def index
     @deliverable_submissions = DeliverableSubmission.all
+    @deliverable_submissions = @deliverable_submissions.select {|deliverable| deliverable.is_accessible_by(current_user)}
 
     respond_to do |format|
       format.html # index.html.erb
