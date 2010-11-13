@@ -56,12 +56,10 @@ class DeliverableSubmissionsController < ApplicationController
   # GET /deliverable_submissions/1/edit
   def edit
     @deliverable_submission = DeliverableSubmission.find(params[:id])
-    # TODO: hbarnor - Enable after teams support is in 
-    # if !@deliverable_submission.editable(current_user)          
-    #   flash[:error] = 'You are unable to update effort logs from the past.'
-    #   redirect_to(deliverable_submission_url) and return
-    # end
-
+    if !@deliverable_submission.editable?(current_user)          
+      flash[:error] = 'You are not authorized to edit this deliverable.'
+      redirect_to(deliverable_submissions_url) and return
+    end
   end
 
   # POST /deliverable_submissions

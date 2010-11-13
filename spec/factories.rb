@@ -19,10 +19,10 @@ end
 
 Factory.define :student, :parent => :default_person do |u|
   u.sequence(:login) { |n| "student#{n}" }
+  u.first_name 'Baba'
+  u.last_name 'Student'
   u.email {|a| "#{a.first_name}.#{a.last_name}@andrew.cmu.edu" }
   u.is_student true
-  u.first_name 'Student'
-  u.last_name 'Baba'
 end
 
 Factory.define :course, :class => Course do |c|

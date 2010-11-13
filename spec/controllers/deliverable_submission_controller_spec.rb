@@ -1,21 +1,14 @@
 require 'spec_helper'
 
 describe DeliverableSubmissionsController do 
-  fixtures :users  
   integrate_views
 
 
   describe "NEW deliverable_submission" do
 
-    before(:each) do
-      todd = Factory.create(:staff)
-      metrics = Factory.create(:metrics)
-      team = Factory.create(:team, :primary_faculty_id => todd.id, :course_id => metrics.id)
-    end
-
     it "must have an individual checkbox" do
       activate_authlogic
-      UserSession.create users(:student_sam)
+      UserSession.create(Factory.create(:student, :first_name => 'Sam'))
       get :new
       response.should be_success
       response.should have_tag("input", :type => "checkbox")
@@ -27,9 +20,11 @@ describe DeliverableSubmissionsController do
 
     before(:each) do
       activate_authlogic
-      UserSession.create users(:student_sam)
-      @sam_deliverable = Factory(:deliverable_submission, :person_id => users(:student_sam).id)
-      @becky_deliverable = Factory(:deliverable_submission, :person_id => users(:student_becky).id)
+      sam = Factory.create(:student, :first_name => 'Sam')
+      becky = Factory.create(:student, :first_name => 'Becky')
+      UserSession.create(sam)
+      @sam_deliverable = Factory(:deliverable_submission, :person => sam, :is_individual => true)
+      @becky_deliverable = Factory(:deliverable_submission, :person => becky)
     end
     
 
@@ -43,9 +38,8 @@ describe DeliverableSubmissionsController do
     it "must fail if user does not own individual deliverable" do
       @becky_deliverable.should be_valid
       get :edit, :id => @becky_deliverable
-      # TODO: hbarnor - Enable after teams support is in and controller code is enabled.
-      # response.should_not be_success
-      # response.should be_forbidden
+      response.should redirect_to(deliverable_submissions_url)
+      flash[:error].should == 'You are not authorized to edit this deliverable.' 
     end
   end
 

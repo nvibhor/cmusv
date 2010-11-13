@@ -11,8 +11,8 @@ class DeliverableSubmission < ActiveRecord::Base
   # TODO(vibhor): Update to use amazon s3 as storage.
   has_attached_file :deliverable,
                     :storage => :filesystem,
-                    :url => "/deliverable_submissions/download/:id",
-                    :path => ":rails_root/deliverable_submissions/:id/:filename"
+                    :url => "/deliverable_submissions/download/:filename",
+                    :path => ":rails_root/public/deliverable_submissions/:id/:filename"
 
   validates_attachment_presence :deliverable
 
@@ -26,19 +26,25 @@ class DeliverableSubmission < ActiveRecord::Base
     end
   end
 
+  # editable wrapper
+  def editable?(current_user)
+    is_accessible_by(current_user)
+  end
+
+
   def is_accessible_by(user)
     access = false
     if not user.nil?
       # owner
-      if self.person.id == user.id
+      if self.person_id == user.id
         access = true
       end
-
+  
       # faculty member
       if user.is_staff == true
         access = true
       end
-
+      
       # team member in team deliverable
       if self.is_individual == false
         if not self.team.nil?
