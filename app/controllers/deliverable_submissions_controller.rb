@@ -19,6 +19,10 @@ class DeliverableSubmissionsController < ApplicationController
   # GET /deliverable_submissions/1.xml
   def show
     @deliverable_submission = DeliverableSubmission.find(params[:id])
+    if !@deliverable_submission.is_accessible_by(current_user)          
+      flash[:error] = 'You are not authorized for that deliverable. Here are your deliverables.'
+      redirect_to(deliverable_submissions_url) and return
+    end
 
     respond_to do |format|
       format.html # show.html.erb

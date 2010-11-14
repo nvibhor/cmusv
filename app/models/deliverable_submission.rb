@@ -18,8 +18,8 @@ class DeliverableSubmission < ActiveRecord::Base
 
   def before_save
     if not self.is_individual?
-      self.person.teams.each do |t|
-        if (t.course == self.course)
+      self.course.teams.each do |t|
+        if t.people.include?(self.person)
           self.team = t
         end
       end
@@ -33,10 +33,17 @@ class DeliverableSubmission < ActiveRecord::Base
 
 
   def is_accessible_by(user)
+    # could not find a clear example of overriding the 
+    # the comparison operator in models 
+    # so for now we do this hack     
+    if user.instance_of?(User)
+      # $stdout.sync = true
+      user = Person.find(user.id)
+    end
     access = false
     if not user.nil?
       # owner
-      if self.person_id == user.id
+      if self.person == user
         access = true
       end
   

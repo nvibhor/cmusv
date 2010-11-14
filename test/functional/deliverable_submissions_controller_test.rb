@@ -33,7 +33,7 @@ class DeliverableSubmissionsControllerTest < ActionController::TestCase
   test "should show deliverable_submission" do
     login_as :student_sam    
     get :show, :id => deliverable_submissions(:one).to_param
-    assert_response :success
+    assert_redirected_to(deliverable_submissions_url)
   end
 
   test "should get edit" do
