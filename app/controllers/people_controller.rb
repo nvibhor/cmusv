@@ -17,7 +17,7 @@ class PeopleController < ApplicationController
       if development?
         @people = Person.find(:all, :conditions => ['human_name LIKE ?', "%#{params[:search]}%"])
       else
-        @people = Person.find(:all, :conditions => ['human_name ILIKE ?', "%#{params[:search]}%"])
+        @people = Person.find(:all, :conditions => ['human_name LIKE ?', "%#{params[:search]}%"])
       end
     else
           @people = Person.find(:all, :conditions => ['is_active = ?', true],  :order => "first_name ASC, last_name ASC")
@@ -25,11 +25,11 @@ class PeopleController < ApplicationController
 
     
 #    respond_to do |format|
-##      format.html # index.html.erb
-#      format.html { render :html => @people, :layout => "cmu_sv" } # index.html.erb
-#      format.js   { render :js => @people, :layout => false }
-#      format.xml  { render :xml => @people }
-#    end
+ #     format.html # index.html.erb
+  #    format.html { render :html => @people, :layout => "cmu_sv" } # index.html.erb
+  #    format.js   { render :js => @people, :layout => false }
+  #    format.xml  { render :xml => @people }
+  #  end
   end
 
   def phone_book
@@ -46,22 +46,28 @@ class PeopleController < ApplicationController
   # GET /people/AndrewCarnegie
   # GET /people/AndrewCarnegie.xml
   def show
+    @person = nil
     if(params[:id].to_i == 0) #This is a string
       @person = Person.find_by_twiki_name(params[:id])
     else #This is a number
-      @person = Person.find(params[:id])
-    end
-    @person.revert_to params[:version_id] if params[:version_id]
-
-    if(@person && @person.papers.size > 0 )
-      @show_my_papers_link = true
+      # should be find_by_id
+      @person = Person.find_by_id(params[:id])
     end
 
+    if !@person.nil?
+      @person.revert_to params[:version_id] if params[:version_id]
+
+      if(@person && @person.papers.size > 0 )
+        @show_my_papers_link = true
+      end
+    end
+    
     respond_to do |format|
       if @person.nil?
-        flash[:error] = "Person with an id of #{params[:id]} is not in this system."
+        @errornote = "Person with an id of #{params[:id]} is not in this system."
+        flash[:error] = @errornote
         format.html { redirect_to(people_url)  }
-        format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @errornote, :status => :unprocessable_entity }
       else
         format.html # show.html.erb
         format.xml  { render :xml => @person }
@@ -114,9 +120,10 @@ class PeopleController < ApplicationController
 
     respond_to do |format|
       if @person.nil?
-        flash[:error] = "Person #{params[:twiki_name]} is not in this system."
+        @errornote = "Person #{params[:twiki_name]} is not in this system."
+        flash[:error] = @errornote
         format.html { redirect_to(people_url)  }
-        format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @errornote, :status => :unprocessable_entity }
       else
         format.html { render :html => @person, :layout => false }# show.html.erb
         format.xml  { render :xml => @person }
@@ -156,7 +163,7 @@ class PeopleController < ApplicationController
 #      redirect_to(people_url) and return
 #    end
 
-    @person = Person.find(params[:id])
+    @person = Person.find_by_id(params[:id])
   end
 
   # POST /people
@@ -256,7 +263,7 @@ class PeopleController < ApplicationController
   # DELETE /people/1.xml
   def destroy
     if !current_user.is_admin?
-      flash[:error] = 'You don''t have permission to do this action.'
+      flash[:error] = 'You don\'t have permission to do this action.'
       redirect_to(people_url) and return   
     end  
       
@@ -277,7 +284,7 @@ class PeopleController < ApplicationController
     person_id = @person.id.to_i
     if (current_user.id != person_id)
       unless (current_user.is_staff?)||(current_user.is_admin?)
-      flash[:error] = 'You don''t have permission to see another person''s teams.'
+      flash[:error] = 'You don\'t have permission to see another person\'s teams.'
       redirect_to(people_url) and return
       end
     end
@@ -291,7 +298,6 @@ class PeopleController < ApplicationController
     @past_teams_as_member = Team.find_by_sql(["SELECT t.* FROM  teams t INNER JOIN teams_people tp ON ( t.id = tp.team_id) INNER JOIN users u ON (tp.person_id = u.id) INNER JOIN courses c ON (t.course_id = c.id) WHERE u.id = ? AND (c.semester <> ? OR c.year <> ?)", person_id, @current_semester, @current_year])
 
     (@teams_map, @teams_students_map) = current_user.faculty_teams_map(person_id)
-    a = 10
   end
 
 end
