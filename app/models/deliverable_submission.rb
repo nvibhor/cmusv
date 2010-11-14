@@ -38,7 +38,7 @@ class DeliverableSubmission < ActiveRecord::Base
     # so for now we do this hack     
     if user.instance_of?(User)
       # $stdout.sync = true
-      user = Person.find(user.id)
+      user = Person.find_by_id(user.id)
     end
     access = false
     if not user.nil?
