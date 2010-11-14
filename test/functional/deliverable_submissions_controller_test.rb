@@ -37,9 +37,9 @@ class DeliverableSubmissionsControllerTest < ActionController::TestCase
   end
 
   test "should get edit" do
-    login_as :student_sam    
+    login_as :student_sam
     get :edit, :id => deliverable_submissions(:one).to_param
-    assert_response :success
+    assert_redirected_to(deliverable_submissions_url)
   end
 
   test "should update deliverable_submission" do
