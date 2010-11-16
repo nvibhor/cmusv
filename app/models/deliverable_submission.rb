@@ -1,4 +1,7 @@
 class DeliverableSubmission < ActiveRecord::Base
+  # setting the table name to avoid the mysql index lenth 
+  # problem
+  acts_as_versioned :table_name => 'deliverable_versions'
   belongs_to :person
   belongs_to :course
   belongs_to :team
@@ -12,8 +15,12 @@ class DeliverableSubmission < ActiveRecord::Base
   has_attached_file :deliverable,
                     :storage => :filesystem,
                     :url => "/deliverable_submissions/download/:filename",
-                    :path => ":rails_root/public/deliverable_submissions/:id/:filename"
+  :path => ":rails_root/public/deliverable_submissions/:id/:version/:filename"
 
+  # Add :version interpolation to paperclip
+  Paperclip.interpolates :version do |attachment, style|
+    attachment.instance.version.to_s  
+  end
   validates_attachment_presence :deliverable
 
   def before_save

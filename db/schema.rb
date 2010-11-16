@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101104115916) do
+ActiveRecord::Schema.define(:version => 20101114230833) do
 
   create_table "course_numbers", :force => true do |t|
     t.string   "name"
@@ -75,6 +75,23 @@ ActiveRecord::Schema.define(:version => 20101104115916) do
     t.datetime "updated_at"
   end
 
+  create_table "deliverable_submission_versions", :force => true do |t|
+    t.integer  "deliverable_submission_id"
+    t.integer  "version"
+    t.datetime "submission_date"
+    t.integer  "person_id"
+    t.integer  "course_id"
+    t.integer  "task_number"
+    t.string   "comments"
+    t.string   "deliverable_file_name"
+    t.string   "deliverable_content_type"
+    t.integer  "deliverable_file_size"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "is_individual",             :default => false
+    t.integer  "team_id"
+  end
+
   create_table "deliverable_submissions", :force => true do |t|
     t.datetime "submission_date"
     t.integer  "person_id"
@@ -87,8 +104,28 @@ ActiveRecord::Schema.define(:version => 20101104115916) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_individual",            :default => false
+    t.integer  "version"
     t.integer  "team_id"
   end
+
+  create_table "deliverable_versions", :force => true do |t|
+    t.integer  "deliverable_submission_id"
+    t.integer  "version"
+    t.datetime "submission_date"
+    t.integer  "person_id"
+    t.integer  "course_id"
+    t.integer  "task_number"
+    t.string   "comments"
+    t.string   "deliverable_file_name"
+    t.string   "deliverable_content_type"
+    t.integer  "deliverable_file_size"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "is_individual",             :default => false
+    t.integer  "team_id"
+  end
+
+  add_index "deliverable_versions", ["deliverable_submission_id"], :name => "index_deliverable_versions_on_deliverable_submission_id"
 
   create_table "effort_log_line_items", :force => true do |t|
     t.integer  "effort_log_id"
