@@ -49,19 +49,23 @@ class PeopleController < ApplicationController
     if(params[:id].to_i == 0) #This is a string
       @person = Person.find_by_twiki_name(params[:id])
     else #This is a number
-      @person = Person.find(params[:id])
+      @person = Person.find_by_id(params[:id])
     end
-    @person.revert_to params[:version_id] if params[:version_id]
 
-    if(@person && @person.papers.size > 0 )
-      @show_my_papers_link = true
+    if(!@person.nil?)
+       @person.revert_to params[:version_id] if params[:version_id]
+
+       if(@person && @person.papers.size > 0 )
+         @show_my_papers_link = true
+       end
     end
 
     respond_to do |format|
       if @person.nil?
-        flash[:error] = "Person with an id of #{params[:id]} is not in this system."
+        @errormsg  = "Person with an id of #{params[:id]} is not in this system."
+        flash[:error] = @errormsg 
         format.html { redirect_to(people_url)  }
-        format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @errormsg, :status => :unprocessable_entity }
       else
         format.html # show.html.erb
         format.xml  { render :xml => @person }
@@ -75,7 +79,7 @@ class PeopleController < ApplicationController
     redirect_to :action => 'robots' if robot?
     host = get_http_host()
     if !(host.include?("info.sv.cmu.edu") || host.include?("info.west.cmu.edu")) && (current_user.nil?)
-      flash[:error] = 'You don''t have permissions to view this data.'
+      flash[:error] = 'You don\'t have permissions to view this data.'
       redirect_to(people_url)
       return
     end
@@ -114,9 +118,10 @@ class PeopleController < ApplicationController
 
     respond_to do |format|
       if @person.nil?
-        flash[:error] = "Person #{params[:twiki_name]} is not in this system."
+        @errormsg = "Person #{params[:twiki_name]} is not in this system."
+        flash[:error] = @errormsg 
         format.html { redirect_to(people_url)  }
-        format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @errormsg, :status => :unprocessable_entity }
       else
         format.html { render :html => @person, :layout => false }# show.html.erb
         format.xml  { render :xml => @person }
@@ -277,7 +282,7 @@ class PeopleController < ApplicationController
     person_id = @person.id.to_i
     if (current_user.id != person_id)
       unless (current_user.is_staff?)||(current_user.is_admin?)
-      flash[:error] = 'You don''t have permission to see another person''s teams.'
+      flash[:error] = 'You don\'t have permission to see another person''s teams.'
       redirect_to(people_url) and return
       end
     end
@@ -291,7 +296,6 @@ class PeopleController < ApplicationController
     @past_teams_as_member = Team.find_by_sql(["SELECT t.* FROM  teams t INNER JOIN teams_people tp ON ( t.id = tp.team_id) INNER JOIN users u ON (tp.person_id = u.id) INNER JOIN courses c ON (t.course_id = c.id) WHERE u.id = ? AND (c.semester <> ? OR c.year <> ?)", person_id, @current_semester, @current_year])
 
     (@teams_map, @teams_students_map) = current_user.faculty_teams_map(person_id)
-    a = 10
   end
 
 end
