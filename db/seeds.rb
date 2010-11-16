@@ -41,6 +41,7 @@ Factory.define :chris, :parent => :person do |p|
   p.human_name "Chris Jensen"
   p.email "chris.jensen@sv.cmu.edu"
   p.is_student 1
+  p.local_near_remote "remote"  
 end
 
 Factory.define :howard, :parent => :person do |p|
@@ -66,6 +67,7 @@ Factory.define :awe_smith, :parent => :person do |p|
   p.image_uri "/images/mascot.jpg"
   p.email "awe.smith@sv.cmu.edu"
   p.webiso_account "awesm@andrew.cmu.edu"
+  p.local_near_remote "local"
 end
 
 Factory.define :betty_ross, :parent => :person do |p|
@@ -81,6 +83,7 @@ Factory.define :betty_ross, :parent => :person do |p|
   p.image_uri "/images/mascot.jpg"
   p.email "betty.ross@sv.cmu.edu"
   p.webiso_account "bross@andrew.cmu.edu"
+  p.local_near_remote "local"
 end
 
 Factory.define :charlie_moss, :parent => :person do |p|
@@ -96,6 +99,7 @@ Factory.define :charlie_moss, :parent => :person do |p|
   p.image_uri "/images/mascot.jpg"
   p.email "charlie.moss@sv.cmu.edu"
   p.webiso_account "cmoss@andrew.cmu.edu"
+  p.local_near_remote "local"
 end
 
 
@@ -132,6 +136,8 @@ Factory.define :ian_zhang, :parent => :person do |p|
   p.image_uri "/images/mascot.jpg"
   p.email "ian.zhang@sv.cmu.edu"
   p.webiso_account "yz3@andrew.cmu.edu"
+  p.organization_name "CompanyB"
+  p.local_near_remote "remote"
 end
 
 
@@ -163,6 +169,8 @@ Factory.define :anthony_tang, :parent => :person do |p|
   p.human_name "Anthony Tang"
   p.image_uri "/images/mascot.jpg"
   p.email "anthony.tang@sv.cmu.edu"
+  p.organization_name "CompanyA"
+  p.local_near_remote "local"
 end
 
 Factory.define :henry_barnor, :parent => :person do |p|
@@ -177,6 +185,9 @@ Factory.define :henry_barnor, :parent => :person do |p|
   p.human_name "Henry Barnor"
   p.image_uri "/images/mascot.jpg"
   p.email "henry.barnor@sv.cmu.edu"
+  p.organization_name "CompanyB"
+  p.local_near_remote "near"
+
 end
 
 Factory.define :fred, :parent => :person do |p|
@@ -191,6 +202,9 @@ Factory.define :fred, :parent => :person do |p|
   p.human_name "Frederick Kautz"
   p.image_uri "/images/mascot.jpg"
   p.email "frederick.kautz@sv.cmu.edu"
+  p.organization_name "CompanyB"
+  p.local_near_remote "remote"
+
 end
 
 Factory.define :vibhor, :parent => :person do |p|
@@ -206,6 +220,8 @@ Factory.define :vibhor, :parent => :person do |p|
   p.image_uri "/images/mascot.jpg"
   p.email "vibhor.nanavati@sv.cmu.edu"
   p.webiso_account "vnanavat@andrew.cmu.edu"
+  p.organization_name "CompanyB"
+  p.local_near_remote "remote"  
 end
 
 Factory.define :team_calipers, :class => Team do |t|
