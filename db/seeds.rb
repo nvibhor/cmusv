@@ -237,7 +237,6 @@ end
 Factory.define :team_calipers, :class => Team do |t|
  t.name "Team Calipers"
  t.email "fall-2010-calipers@west.cmu.edu"
- t.person_name "Anthony Tang"
  t.person_name2 "Frederick Kautz"
  t.person_name3 "Henry Barnor"
  t.person_name4 "Vibhor Nanavati"
