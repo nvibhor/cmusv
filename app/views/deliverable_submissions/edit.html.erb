@@ -1,0 +1,7 @@
+<% content_for :title, "Edit submission" %>
+<h1>Editing deliverable_submission</h1>
+
+<%= render :partial => "editable_deliverable_submission",:locals => { :button_name => "Update" } %>
+
+<%= link_to 'Show', @deliverable_submission %> |
+<%= link_to 'Back', deliverable_submissions_path %><br/>

@@ -1,0 +1,27 @@
+<% form_for @deliverable_submission,  :html => { :multipart => true } do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :course_id %>:&nbsp;
+    <%= f.collection_select(:course_id, Course.find(:all), :id, :name,
+                            {:prompt => 'Select course'}) %>
+  </p>
+  <p>
+    <%= f.check_box :is_individual%>
+    <%= f.label 'Individual deliverable' %>
+ </p>
+  <p>
+    <%= f.label :task_number %>:&nbsp;&nbsp;
+    <%= f.text_field :task_number %>
+  </p>
+  <p>
+    <%= f.label 'Upload file' %>&nbsp;
+    <%= f.file_field :deliverable %>
+  </p>
+  <p>
+    <%= f.label :comments %><br />
+    <%= f.text_area :comments %>
+  </p>
+  <p>
+    <%= f.submit button_name %>
+  </p>
+<% end %>

@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  # TODO: we should explicitly list the actions that we are allowing here.
+  map.connect 'deliverable_submissions/download/:id', :controller => 'deliverable_submissions', :action => 'download'
+  map.resources :deliverable_submissions
+
 
   map.connect 'delayed_system_jobs/',  :controller => 'delayed_system_jobs', :action => "index"
   map.resources :delayed_system_jobs #so that we can easily delete
