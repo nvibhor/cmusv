@@ -23,6 +23,9 @@ class DeliverableSubmission < ActiveRecord::Base
           self.team = t
         end
       end
+      if self.team.nil?
+        self.is_individual = true
+      end
     end
   end
 
